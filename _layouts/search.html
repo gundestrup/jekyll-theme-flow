@@ -1,0 +1,15 @@
+---
+layout: default
+---
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">{{ page.title | default: "Search" }}</h1>
+    {% if site.client_search.enabled %}
+      {% search_form %}
+    {% else %}
+      <p>Search is not enabled. Set <code>client_search.enabled: true</code> in
+      <code>_config.yml</code>.</p>
+    {% endif %}
+  </div>
+</section>

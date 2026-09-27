@@ -72,8 +72,18 @@ When enabled:
 - **sidebar layouts** render a search bar in a top bar above the content
 - **topnav** renders a smaller search field on the right of the navbar
 - **bare** renders no search chrome
-- a `/search/` page ships with the theme (override it by adding your own
-  `search.md`)
+- the theme ships a **`search` layout** (`_layouts/search.html`) — add a
+  page to your site to use it, since theme gems only ship
+  `_layouts`/`_includes`/`_sass`/`assets`, not root pages:
+
+  ```markdown
+  ---
+  layout: search
+  title: Search
+  permalink: /search/
+  nav_exclude: true
+  ---
+  ```
 
 All `client_search` options (fuzzy MiniSearch, Ollama embeddings, related
 results, …) work as documented in the gem.
