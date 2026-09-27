@@ -1,0 +1,14 @@
+---
+layout: default
+---
+
+<div class="notification is-warning is-light flow-archive-banner">
+  {{ site.flow.archive.banner | default: "This is an archived version." | escape }}
+  {%- if page.archive_link_current %}
+  <a href="{{ page.archive_link_current | relative_url | escape }}">{{ site.flow.archive.current_link | default: "See the current version" | escape }}</a>
+  {%- endif %}
+</div>
+
+{{ content }}
+
+{% include archive_versions.html %}

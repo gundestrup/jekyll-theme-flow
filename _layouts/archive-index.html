@@ -1,0 +1,26 @@
+---
+layout: default
+---
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">{{ page.title | default: "Archive" | escape }}</h1>
+    {{ content }}
+    {%- assign archived = site.pages | where: "layout", "archive" | sort: "archive_link_current" -%}
+    {%- if archived.size > 0 %}
+    <ul class="flow-archive-index">
+      {%- for p in archived %}
+      <li>
+        <a href="{{ p.url | relative_url | escape }}">{{ p.title | escape }}</a>
+        {%- if p.archive_link_current %}
+        &mdash; {{ site.flow.archive.replaced_by | default: "replaced by" | escape }}
+        <a href="{{ p.archive_link_current | relative_url | escape }}">{{ site.flow.archive.current_link | default: "current version" | escape }}</a>
+        {%- endif %}
+      </li>
+      {%- endfor %}
+    </ul>
+    {%- else %}
+    <p>{{ site.flow.archive.index_empty | default: "No archived pages." | escape }}</p>
+    {%- endif %}
+  </div>
+</section>

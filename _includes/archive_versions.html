@@ -1,0 +1,36 @@
+{% comment %}
+  Cross-links a page with its archived versions via the shared
+  `archive_link_current` front matter key (set on archived pages).
+
+  Archived page -> links the current version + sibling archives
+  Current page  -> lists pages whose archive_link_current == page.url
+  (include this file manually at the bottom of the current page)
+{% endcomment %}
+
+{%- if page.layout == "archive" and page.archive_link_current -%}
+  {%- assign current = site.pages | where: "url", page.archive_link_current | first -%}
+  {%- assign siblings = site.pages | where: "archive_link_current", page.archive_link_current -%}
+  <hr>
+  <p><strong>{{ site.flow.archive.versions_heading | default: "Versions of this page" | escape }}</strong></p>
+  <ul>
+    <li><a href="{{ page.archive_link_current | relative_url | escape }}">{{ current.title | default: page.archive_link_current | escape }}</a>
+      ({{ site.flow.archive.current_label | default: "current" | escape }})</li>
+    {%- for v in siblings -%}
+      {%- if v.url != page.url %}
+    <li><a href="{{ v.url | relative_url | escape }}">{{ v.title | escape }}</a>
+      ({{ site.flow.archive.archived_label | default: "archived" | escape }})</li>
+      {%- endif -%}
+    {%- endfor %}
+  </ul>
+{%- elsif page.layout != "archive" -%}
+  {%- assign versions = site.pages | where: "archive_link_current", page.url -%}
+  {%- if versions.size > 0 %}
+  <hr>
+  <p><strong>{{ site.flow.archive.previous_heading | default: "Previous versions" | escape }}</strong></p>
+  <ul>
+    {%- for v in versions %}
+    <li><a href="{{ v.url | relative_url | escape }}">{{ v.title | escape }}</a></li>
+    {%- endfor %}
+  </ul>
+  {%- endif %}
+{%- endif -%}

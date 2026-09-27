@@ -53,7 +53,17 @@ nav_exclude: true    # optional: hide from nav
 
 `grand_parent:` is honoured for auto-opening the tree on grandchildren.
 The current page's branch opens automatically; parents get a chevron
-toggle.
+toggle. The current page and its direct parent are marked `is-active`
+in both the sidebar tree and the topnav dropdown.
+
+An optional `icon:` front matter key renders an icon next to the title —
+in the flat branch *and* the dropdown branch (resolved by the configured
+default `icon_flow.pack`):
+
+```yaml
+title: Home
+icon: home
+```
 
 ## Search (jekyll-client-search)
 
@@ -122,6 +132,92 @@ icon_flow:
 
 See the gem's README for the full styling contract and adapter model.
 
+## Archiving pages
+
+Superseded pages can stay live at their permalink under `/archive/`, get
+a warning banner, and cross-link to their replacement — all driven by
+one front matter key, `archive_link_current`.
+
+**Archive a page** — set `layout: archive` and point it at the current
+version:
+
+```yaml
+title: Section (2020)
+layout: archive
+permalink: /archive/section-2020.html   # convention: /archive/ + original path
+archive_link_current: /section.html     # the page that replaced this one
+nav_exclude: true
+```
+
+The `archive` layout renders a Bulma warning banner ("This is an
+archived version" + link to the current page), then a "Versions of this
+page" footer listing the current version and sibling archives. Archived
+pages also get `<meta name="robots" content="noindex">` automatically —
+`noindex: true` works standalone on any page (e.g. a search page).
+
+**Cross-link from the current page** — add one line at the bottom of the
+current version:
+
+```liquid
+{% include archive_versions.html %}
+```
+
+It renders a "Previous versions" footer listing every page whose
+`archive_link_current` points back. Archiving a future version then
+needs zero link maintenance.
+
+**Archive index** — ship your own page using the `archive-index` layout:
+
+```yaml
+---
+layout: archive-index
+title: Archive
+permalink: /archive/
+nav_exclude: true
+---
+```
+
+It lists every `layout: archive` page sorted by `archive_link_current`.
+
+**Sitemap exclusion** — Jekyll themes cannot ship plugin hooks, and
+layout front matter never reaches `page.data` where `jekyll-sitemap`
+looks. The zero-plugin convention is scoped front-matter defaults — keep
+archived sources in one directory and let `_config.yml` apply the
+contract:
+
+```yaml
+defaults:
+  - scope:
+      path: "archive"
+    values:
+      layout: archive
+      sitemap: false       # excluded from sitemap.xml
+      nav_exclude: true
+```
+
+Files under `archive/` then need only `title`, `permalink` and
+`archive_link_current`. (Without the defaults, set `sitemap: false` in
+each page's front matter.)
+
+**Strings** — all archive text is configurable:
+
+```yaml
+flow:
+  archive:
+    banner: "Dette er en arkiveret version."
+    current_link: "Se den gældende version"
+    versions_heading: "Versioner af denne side"
+    previous_heading: "Tidligere versioner"
+    current_label: "gældende"
+    archived_label: "arkiveret"
+    replaced_by: "erstattet af"
+    index_empty: "Ingen arkiverede sider."
+```
+
+The demo site shows the convention: `archive/demo-2020.md` is archived
+via the scoped defaults above, `demo-section.md` is its current version,
+and `arkiv.md` uses `archive-index` at `/archive/`.
+
 ## Other config
 
 ```yaml
@@ -134,6 +230,7 @@ flow:
   search_placeholder: "Search"   # placeholder text in the search field
 
   footer_text: "Powered by ..."  # optional footer line
+  # archive:                     # banner/footer strings, see "Archiving pages"
 ```
 
 ## Customization surface

@@ -8,13 +8,16 @@
   {%- for p in include.pages -%}
   {%- assign kids = site.html_pages | where: "parent", p.title | where_exp: "k", "k.nav_exclude != true" | sort: "nav_order" -%}
   {%- assign is_active = false -%}
-  {%- if p.url == page.url -%}{%- assign is_active = true -%}{%- endif -%}
+  {%- if p.url == page.url or page.parent == p.title -%}{%- assign is_active = true -%}{%- endif -%}
   {%- if kids.size > 0 -%}
   {%- assign start_open = false -%}
   {%- if is_active or page.parent == p.title or page.grand_parent == p.title -%}{%- assign start_open = true -%}{%- endif %}
   <li x-data="{ open: {{ start_open }} }">
     <div class="is-flex is-justify-content-space-between is-align-items-center">
-      <a href="{{ p.url | relative_url | escape }}"{% if is_active %} class="is-active"{% endif %}>{{ p.title | escape }}</a>
+      <a href="{{ p.url | relative_url | escape }}"{% if is_active %} class="is-active"{% endif %}>
+        {%- if p.icon %}<span class="icon">{% icon p.icon %}</span> {% endif -%}
+        {{- p.title | escape -}}
+      </a>
       <button class="button is-ghost is-small px-2" @click="open = !open" :aria-expanded="open" aria-label="Toggle {{ p.title | escape }}">
         <span class="icon flow-chevron" :class="{ 'is-open': open }">
           {% icon_lucide chevron-right %}
@@ -26,7 +29,10 @@
     </div>
   </li>
   {%- else -%}
-  <li><a href="{{ p.url | relative_url | escape }}"{% if is_active %} class="is-active"{% endif %}>{{ p.title | escape }}</a></li>
+  <li><a href="{{ p.url | relative_url | escape }}"{% if is_active %} class="is-active"{% endif %}>
+    {%- if p.icon %}<span class="icon">{% icon p.icon %}</span> {% endif -%}
+    {{- p.title | escape -}}
+  </a></li>
   {%- endif -%}
   {%- endfor %}
 </ul>

@@ -26,3 +26,14 @@ client_search:
 
 plugins:
   - jekyll-client-search
+  - jekyll-icon-flow
+
+# Archive convention: pages under archive/ get layout + sitemap/nav
+# exclusion via front-matter defaults (see README "Archiving pages").
+defaults:
+  - scope:
+      path: "archive"
+    values:
+      layout: archive
+      sitemap: false
+      nav_exclude: true

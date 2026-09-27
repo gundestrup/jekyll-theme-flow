@@ -18,17 +18,28 @@
     <div class="navbar-start">
       {% for p in nav_roots -%}
       {%- assign kids = site.html_pages | where: "parent", p.title | where_exp: "k", "k.nav_exclude != true" | sort: "nav_order" -%}
+      {%- assign p_active = false -%}
+      {%- if p.url == page.url or page.parent == p.title %}{% assign p_active = true %}{% endif -%}
       {%- if kids.size > 0 %}
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link" href="{{ p.url | relative_url | escape }}">{{ p.title | escape }}</a>
+        <a class="navbar-link{% if p_active %} is-active{% endif %}" href="{{ p.url | relative_url | escape }}">
+          {%- if p.icon %}<span class="icon">{% icon p.icon %}</span> {% endif -%}
+          {{- p.title | escape -}}
+        </a>
         <div class="navbar-dropdown">
           {% for c in kids -%}
-          <a class="navbar-item" href="{{ c.url | relative_url | escape }}">{{ c.title | escape }}</a>
+          <a class="navbar-item{% if c.url == page.url %} is-active{% endif %}" href="{{ c.url | relative_url | escape }}">
+            {%- if c.icon %}<span class="icon">{% icon c.icon %}</span> {% endif -%}
+            {{- c.title | escape -}}
+          </a>
           {% endfor -%}
         </div>
       </div>
       {%- else %}
-      <a class="navbar-item" href="{{ p.url | relative_url | escape }}">{{ p.title | escape }}</a>
+      <a class="navbar-item{% if p_active %} is-active{% endif %}" href="{{ p.url | relative_url | escape }}">
+        {%- if p.icon %}<span class="icon">{% icon p.icon %}</span> {% endif -%}
+        {{- p.title | escape -}}
+      </a>
       {%- endif -%}
       {% endfor %}
     </div>

@@ -9,12 +9,12 @@ RSpec.describe "jekyll-theme-flow site build" do
   let(:files) do
     jekyll_files do
       file "index.md" do
-        frontmatter("layout" => "default", "title" => "Home", "nav_order" => 1)
+        frontmatter("layout" => "default", "title" => "Home", "nav_order" => 1, "icon" => "home")
         contents "Welcome"
       end
       file "section.md" do
         frontmatter("layout" => "default", "title" => "Section", "nav_order" => 2)
-        contents "Section page"
+        contents "Section page\n\n{% include archive_versions.html %}"
       end
       file "child.md" do
         frontmatter("layout" => "default", "title" => "Child", "parent" => "Section")
@@ -23,6 +23,27 @@ RSpec.describe "jekyll-theme-flow site build" do
       file "nav-page.md" do
         frontmatter("layout" => "topnav", "title" => "Topnav")
         contents "Navbar page"
+      end
+      file "topnav-child.md" do
+        frontmatter("layout" => "topnav", "title" => "Topnav Child", "parent" => "Topnav")
+        contents "Dropdown child"
+      end
+      file "archive/old-section.md" do
+        frontmatter("layout" => "archive", "title" => "Old Section",
+                    "permalink" => "/archive/old-section.html",
+                    "archive_link_current" => "/section.html", "nav_exclude" => true)
+        contents "Outdated"
+      end
+      file "archive/older-section.md" do
+        frontmatter("layout" => "archive", "title" => "Ancient Section",
+                    "permalink" => "/archive/older-section.html",
+                    "archive_link_current" => "/section.html", "nav_exclude" => true)
+        contents "Even older"
+      end
+      file "arkiv.md" do
+        frontmatter("layout" => "archive-index", "title" => "Archive",
+                    "permalink" => "/archive/", "nav_exclude" => true)
+        contents "Older versions of pages."
       end
       file "right-page.md" do
         frontmatter("layout" => "sidebar-right", "title" => "Right")
@@ -110,9 +131,28 @@ RSpec.describe "jekyll-theme-flow site build" do
     end
   end
 
+  # Pages using `icon:` must name icons in the configured pack — the
+  # strict-mode build below uses a fixture without nav icons.
+  let(:files_no_nav_icons) do
+    jekyll_files do
+      file "index.md" do
+        frontmatter("layout" => "default", "title" => "Home")
+        contents "Welcome"
+      end
+      file "section.md" do
+        frontmatter("layout" => "default", "title" => "Section")
+        contents "Section page"
+      end
+      file "child.md" do
+        frontmatter("layout" => "default", "title" => "Child", "parent" => "Section")
+        contents "Child page"
+      end
+    end
+  end
+
   it "keeps theme chrome visible when the site uses a brand icon pack" do
     settings = config.merge("icon_flow" => { "pack" => "simple", "on_missing" => "strict" })
-    jekyll_build(config: settings, files: files) do |site|
+    jekyll_build(config: settings, files: files_no_nav_icons) do |site|
       home = site.pages.find { |p| p.url == "/" }.output
       expect(home).to include('class="lucide lucide-search icon icon-search"')
       expect(home).to include("icon-chevron-right")
@@ -149,6 +189,49 @@ RSpec.describe "jekyll-theme-flow site build" do
       home = site.pages.find { |p| p.url == "/" }.output
       expect(home).not_to include("flow-brand-icon", "rel=\"icon\"")
       expect(home).not_to include("flow-search", "data-icon-pack=")
+    end
+  end
+
+  it "renders the archive banner, version links, and noindex on archived pages" do
+    jekyll_build(config: config, files: files) do |site|
+      old = site.pages.find { |p| p.url == "/archive/old-section.html" }.output
+
+      expect(old).to include("notification is-warning")
+      expect(old).to include('href="/section.html"')
+      expect(old).to include('content="noindex"')
+      expect(old).to include('href="/archive/older-section.html"')
+      expect(old).to include("(current)")
+      expect(old).to include("(archived)")
+
+      home = site.pages.find { |p| p.url == "/" }.output
+      expect(home).not_to include("noindex")
+    end
+  end
+
+  it "lists archived versions on the current page and the archive index" do
+    jekyll_build(config: config, files: files) do |site|
+      section = site.pages.find { |p| p.url == "/section.html" }.output
+      expect(section).to include("Previous versions")
+      expect(section).to include('href="/archive/old-section.html"')
+      expect(section).to include('href="/archive/older-section.html"')
+
+      index = site.pages.find { |p| p.url == "/archive/" }.output
+      expect(index).to include('href="/archive/old-section.html"')
+      expect(index).to include('href="/archive/older-section.html"')
+      expect(index).to include("replaced by")
+    end
+  end
+
+  it "marks the current nav item and its parent active, and renders nav icons" do
+    jekyll_build(config: config, files: files) do |site|
+      child = site.pages.find { |p| p.url == "/child.html" }.output
+      expect(child).to include('href="/section.html" class="is-active"')
+
+      home = site.pages.find { |p| p.url == "/" }.output
+      expect(home).to include("icon icon-home")
+
+      topnav_child = site.pages.find { |p| p.url == "/topnav-child.html" }.output
+      expect(topnav_child).to include('class="navbar-link is-active" href="/nav-page.html"')
     end
   end
 

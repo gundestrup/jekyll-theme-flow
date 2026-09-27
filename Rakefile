@@ -51,10 +51,12 @@ task :package do
   file = Gem::Package.build(spec)
   contents = Gem::Package.new(file).contents
   required = %w[LICENSE.txt README.md CHANGELOG.md _layouts/default.html _layouts/search.html
+                _layouts/archive.html _layouts/archive-index.html _includes/archive_versions.html
                 _includes/search_slot.html _sass/flow.scss assets/css/theme.scss
                 assets/js/alpine.min.js]
   abort "Gem missing: #{(required - contents).join(', ')}" unless (required - contents).empty?
-  abort "Demo search.md must not ship in a theme gem" if contents.include?("search.md")
+  demo_pages = contents.grep(/\.md\z/) - %w[README.md CHANGELOG.md]
+  abort "Demo pages must not ship in a theme gem: #{demo_pages.join(', ')}" unless demo_pages.empty?
 end
 
 task :semgrep do
