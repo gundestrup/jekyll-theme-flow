@@ -4,7 +4,7 @@ layout: default
 
 <section class="section">
   <div class="container">
-    <h1 class="title">{{ page.title | default: "Search" }}</h1>
+    <h1 class="title">{{ page.title | default: "Search" | escape }}</h1>
     {% if site.client_search.enabled %}
       {% search_form %}
     {% else %}

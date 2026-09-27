@@ -5,12 +5,13 @@
 {%- if site.client_search.enabled -%}
 {%- assign slot_id = include.input_size | default: "full" | slugify -%}
 <div class="flow-search" data-client-search-dropdown>
-  <form class="control has-icons-left" role="search" autocomplete="off" data-cs-dropdown-form>
-    <input class="input{{ include.input_size }}" type="search" name="q" autocomplete="off"
-           placeholder="{{ site.flow.search_placeholder | default: "Search" }}"
+  <form class="control has-icons-left" role="search" action="{{ '/search/' | relative_url }}" method="get" autocomplete="off" data-cs-dropdown-form>
+    <label class="is-sr-only" for="flow-search-input-{{ slot_id }}">{{ site.flow.search_placeholder | default: "Search" | escape }}</label>
+    <input id="flow-search-input-{{ slot_id }}" class="input{{ include.input_size }}" type="search" name="q" autocomplete="off"
+           placeholder="{{ site.flow.search_placeholder | default: "Search" | escape }}"
            aria-expanded="false" aria-controls="flow-search-results-{{ slot_id }}"
            data-cs-dropdown-input>
-    <span class="icon is-left" aria-hidden="true">{% include icon.html name="search" size="0.875em" %}</span>
+    <span class="icon is-left" aria-hidden="true">{% icon_lucide search size:"0.875em" %}</span>
   </form>
   <ul id="flow-search-results-{{ slot_id }}" class="flow-search-results"
       role="listbox" aria-hidden="true" data-cs-dropdown-results></ul>

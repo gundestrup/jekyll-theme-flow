@@ -1,5 +1,9 @@
 # jekyll-theme-flow
 
+[![CI](https://github.com/gundestrup/jekyll-theme-flow/actions/workflows/ci.yml/badge.svg)](https://github.com/gundestrup/jekyll-theme-flow/actions/workflows/ci.yml)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/gundestrup/jekyll-theme-flow)
+[![SonarCloud: setup pending](https://img.shields.io/badge/SonarCloud-setup%20pending-orange)](https://sonarcloud.io/dashboard?id=gundestrup_jekyll-theme-flow)
+
 A Jekyll theme built on [Bulma](https://bulma.io) (CSS) and
 [Alpine.js](https://alpinejs.dev) (interactivity), offering several
 standard layout shells you can switch per site or per page.
@@ -103,9 +107,11 @@ emit normalized inline SVGs (`icon icon-<name>` classes, `currentColor`,
 {% icon_custom logo %}                → your site's own SVGs
 ```
 
-The theme's own chrome (nav chevron, search icon) uses `{% icon %}`, so
-it follows your `icon_flow.pack` choice. `{% include icon.html %}` remains
-as a thin wrapper for include-style call sites.
+Theme chrome uses `{% icon_lucide %}` for its search icon and navigation
+chevrons, so switching the site's default pack to a brand/custom pack cannot
+silently remove those controls. Set `icon_flow.enabled: false` to hide all
+icons. `{% include icon.html %}` remains a thin wrapper for site icons that
+should follow `icon_flow.pack`.
 
 ```yaml
 icon_flow:
@@ -146,8 +152,19 @@ re-themed via `@use "bulma" with (...)`.
 
 ```bash
 bundle install
+bundle exec rake ci        # RuboCop, audit, Semgrep, real-site tests and gem contents
 bundle exec jekyll serve   # demo pages in repo root
 ```
+
+The theme has no project Ruby runtime to instrument with SimpleCov; its
+coverage comes from real consumer-site Jekyll builds, not a misleading Ruby
+percentage. A Codecov badge should be added only with measurable, non-vendored
+browser or template coverage. The SonarCloud badge remains pending until the
+repository is onboarded; the scanner excludes vendored Bulma and Alpine.
+Use `bundle exec rake "version:bump[patch]"` to bump the gemspec and lockfile,
+add a dated changelog entry, and run `bundle exec rake version:pre_release`
+before tagging. GitHub `release` environment and RubyGems trusted publishing
+must be configured before publishing.
 
 Known upstream noise: Bulma 1.0.x emits a handful of Sass `if()`
 deprecation warnings during build — harmless, fixed upstream eventually.

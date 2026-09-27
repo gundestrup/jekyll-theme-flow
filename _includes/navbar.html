@@ -2,8 +2,8 @@
 <nav class="navbar{% if include.mode == "mobile-only" %} is-hidden-desktop{% endif %}" role="navigation" aria-label="main navigation" x-data="{ open: false }">
   <div class="navbar-brand">
     <a class="navbar-item has-text-weight-semibold" href="{{ '/' | relative_url }}">
-      {%- if site.flow.logo and site.flow.logo_enabled != false %}<img class="flow-brand-icon" src="{{ site.flow.logo | relative_url }}" alt="">{% endif %}
-      {{- site.title -}}
+      {%- if site.flow.logo and site.flow.logo_enabled != false %}<img class="flow-brand-icon" src="{{ site.flow.logo | relative_url | escape }}" alt="">{% endif %}
+      {{- site.title | escape -}}
     </a>
     {% if include.mode == "mobile-only" -%}
     <button class="navbar-burger" :class="{ 'is-active': menu }" @click="menu = !menu" :aria-expanded="menu" aria-label="menu">
@@ -20,15 +20,15 @@
       {%- assign kids = site.html_pages | where: "parent", p.title | where_exp: "k", "k.nav_exclude != true" | sort: "nav_order" -%}
       {%- if kids.size > 0 %}
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link" href="{{ p.url | relative_url }}">{{ p.title }}</a>
+        <a class="navbar-link" href="{{ p.url | relative_url | escape }}">{{ p.title | escape }}</a>
         <div class="navbar-dropdown">
           {% for c in kids -%}
-          <a class="navbar-item" href="{{ c.url | relative_url }}">{{ c.title }}</a>
+          <a class="navbar-item" href="{{ c.url | relative_url | escape }}">{{ c.title | escape }}</a>
           {% endfor -%}
         </div>
       </div>
       {%- else %}
-      <a class="navbar-item" href="{{ p.url | relative_url }}">{{ p.title }}</a>
+      <a class="navbar-item" href="{{ p.url | relative_url | escape }}">{{ p.title | escape }}</a>
       {%- endif -%}
       {% endfor %}
     </div>

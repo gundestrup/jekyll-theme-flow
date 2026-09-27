@@ -1,7 +1,7 @@
 <div class="p-4">
   <a class="is-size-5 has-text-weight-semibold" href="{{ '/' | relative_url }}">
-    {%- if site.flow.logo and site.flow.logo_enabled != false %}<img class="flow-brand-icon" src="{{ site.flow.logo | relative_url }}" alt="">{% endif %}
-    {{- site.title -}}
+    {%- if site.flow.logo and site.flow.logo_enabled != false %}<img class="flow-brand-icon" src="{{ site.flow.logo | relative_url | escape }}" alt="">{% endif %}
+    {{- site.title | escape -}}
   </a>
 </div>
 <nav class="menu px-4 pb-4" aria-label="site navigation">

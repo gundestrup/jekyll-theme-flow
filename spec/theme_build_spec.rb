@@ -18,11 +18,23 @@ RSpec.describe "jekyll-theme-flow site build" do
       end
       file "child.md" do
         frontmatter("layout" => "default", "title" => "Child", "parent" => "Section")
-        contents "Child page {% icon home %}"
+        contents "Child page {% icon_lucide home %}"
       end
       file "nav-page.md" do
         frontmatter("layout" => "topnav", "title" => "Topnav")
         contents "Navbar page"
+      end
+      file "right-page.md" do
+        frontmatter("layout" => "sidebar-right", "title" => "Right")
+        contents "Right sidebar page"
+      end
+      file "bare-page.md" do
+        frontmatter("layout" => "bare", "title" => "Bare")
+        contents "Bare page"
+      end
+      file "unsafe.md" do
+        frontmatter("layout" => "default", "title" => '<unsafe" onfocus="alert(1)>')
+        contents "Safe page"
       end
       # Themes only ship _layouts/_includes/_sass/assets — consumers add
       # their own search.md using the theme's `search` layout
@@ -77,6 +89,66 @@ RSpec.describe "jekyll-theme-flow site build" do
 
       expect(nav_page).to include("navbar")
       expect(nav_page).not_to include("flow-sidebar")
+    end
+  end
+
+  it "escapes site and page metadata in HTML contexts" do
+    unsafe = 'A" onmouseover="alert(1) & <unsafe>'
+    settings = config.merge("title" => unsafe, "flow" => {
+                              "layout" => "sidebar-left", "logo" => '/logo" onerror="alert(1).svg',
+                              "favicon" => '/icon" onload="alert(1).ico',
+                              "search_placeholder" => unsafe, "footer_text" => unsafe
+                            })
+    jekyll_build(config: settings, files: files) do |site|
+      home = site.pages.find { |p| p.url == "/" }.output
+      expect(home).to include("A&quot; onmouseover=&quot;alert(1) &amp; &lt;unsafe&gt;")
+      expect(home).to include('src="/logo%22%20onerror=%22alert(1).svg"')
+      expect(home).to include('href="/icon%22%20onload=%22alert(1).ico"')
+      expect(home).not_to include(' onerror="alert(1)')
+      expect(home).to include("&lt;unsafe&quot; onfocus=&quot;alert(1)&gt;")
+      expect(home).not_to include('<unsafe" onfocus="alert(1)>')
+    end
+  end
+
+  it "keeps theme chrome visible when the site uses a brand icon pack" do
+    settings = config.merge("icon_flow" => { "pack" => "simple", "on_missing" => "strict" })
+    jekyll_build(config: settings, files: files) do |site|
+      home = site.pages.find { |p| p.url == "/" }.output
+      expect(home).to include('class="lucide lucide-search icon icon-search"')
+      expect(home).to include("icon-chevron-right")
+    end
+  end
+
+  it "supports search submission without dropdown JavaScript" do
+    settings = config.merge("client_search" => config.fetch("client_search").merge(
+      "dropdown" => { "enabled" => false }
+    ))
+    jekyll_build(config: settings, files: files) do |site|
+      home = site.pages.find { |p| p.url == "/" }.output
+      expect(home).to include('action="/search/"')
+      expect(home).to include('method="get"')
+      expect(home).not_to include("client-search-dropdown.js")
+    end
+  end
+
+  it "renders the right and bare layouts with their intended chrome" do
+    jekyll_build(config: config, files: files) do |site|
+      right = site.pages.find { |p| p.url == "/right-page.html" }.output
+      bare = site.pages.find { |p| p.url == "/bare-page.html" }.output
+      expect(right).to include("flow-sidebar flow-right")
+      expect(bare).not_to include("flow-sidebar", "flow-search", "navbar")
+    end
+  end
+
+  it "respects the icon, logo, favicon and search toggles" do
+    flow = { "logo" => "/logo.svg", "logo_enabled" => false,
+             "favicon" => "/favicon.ico", "favicon_enabled" => false }
+    settings = config.merge("flow" => flow, "icon_flow" => { "enabled" => false },
+                            "client_search" => { "enabled" => false })
+    jekyll_build(config: settings, files: files) do |site|
+      home = site.pages.find { |p| p.url == "/" }.output
+      expect(home).not_to include("flow-brand-icon", "rel=\"icon\"")
+      expect(home).not_to include("flow-search", "data-icon-pack=")
     end
   end
 

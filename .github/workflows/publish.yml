@@ -1,36 +1,34 @@
-name: CI
+name: Release gem
 
 on:
   push:
-  pull_request:
+    tags:
+      - "v*"
 
 permissions:
   contents: read
 
 jobs:
-  test:
-    name: Ruby ${{ matrix.ruby }}
+  release:
     runs-on: ubuntu-latest
+    environment: release
     permissions:
-      contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: ["3.3", "3.4"]
+      contents: write
+      id-token: write
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: jekyll-theme-flow
+          persist-credentials: false
 
-      # The Gemfile uses path dependencies on sibling repos for local
-      # development; check them out side-by-side so Bundler resolves them.
       - name: Check out jekyll-client-search
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: gundestrup/jekyll-client-search
           ref: 8e051ab30fc4df0839c6458951119373b953268a
           path: jekyll-client-search
+          persist-credentials: false
 
       - name: Check out jekyll-icon-flow
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -38,21 +36,31 @@ jobs:
           repository: gundestrup/jekyll-icon-flow
           ref: dcaa01707e37fd9ae12c7fb9357f6b3c10d882b4
           path: jekyll-icon-flow
+          persist-credentials: false
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@984c0c890880bbf811283d6f09c4607c62d210a4 # v1.323.0
         with:
-          ruby-version: ${{ matrix.ruby }}
+          ruby-version: "3.4"
           bundler-cache: true
           working-directory: jekyll-theme-flow
 
       - name: Install Semgrep
         run: pip3 install --only-binary :all: "semgrep==1.176.0"
 
-      - name: Audit Ruby dependencies
+      - name: Verify version and run release checks
         working-directory: jekyll-theme-flow
-        run: bundle exec bundle-audit check --update
+        run: |
+          test "v$(bundle exec rake version:show)" = "$GITHUB_REF_NAME"
+          bundle exec rake version:pre_release
 
-      - name: Run checks
-        working-directory: jekyll-theme-flow
-        run: bundle exec rake ci
+      - name: Configure RubyGems trusted publishing
+        uses: rubygems/configure-rubygems-credentials@dc5a8d8553e6ee01fc26761a49e99e733d17954a # v2.1.0
+
+      - name: Publish gem
+        run: gem push "jekyll-theme-flow/jekyll-theme-flow-${GITHUB_REF_NAME#v}.gem"
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3
+        with:
+          files: "jekyll-theme-flow/*.gem"

@@ -13,9 +13,8 @@ Gem::Specification.new do |spec|
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   spec.metadata["rubygems_mfa_required"] = "true"
 
-  spec.files = `git ls-files -z`.split("\x0").grep(
-    /\A(?:assets|_includes|_layouts|_sass|search\.md|LICENSE|README)/i
-  )
+  spec.files = Dir["assets/**/*", "_includes/**/*", "_layouts/**/*", "_sass/**/*",
+                   "CHANGELOG.md", "LICENSE.txt", "README.md"].select { |path| File.file?(path) }
 
   spec.required_ruby_version = ">= 3.3"
 

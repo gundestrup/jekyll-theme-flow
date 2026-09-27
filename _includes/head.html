@@ -1,8 +1,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
-  <meta name="description" content="{{ page.description | default: site.description | strip_html | strip }}">
+  <title>{% if page.title %}{{ page.title | escape }} · {% endif %}{{ site.title | escape }}</title>
+  <meta name="description" content="{{ page.description | default: site.description | strip_html | strip | escape }}">
   <link rel="stylesheet" href="{{ '/assets/css/theme.css' | relative_url }}">
-  {% if site.flow.favicon and site.flow.favicon_enabled != false %}<link rel="icon" href="{{ site.flow.favicon | relative_url }}">{% endif %}
+  {% if site.flow.favicon and site.flow.favicon_enabled != false %}<link rel="icon" href="{{ site.flow.favicon | relative_url | escape }}">{% endif %}
 </head>

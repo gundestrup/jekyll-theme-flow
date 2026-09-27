@@ -1,0 +1,6 @@
+rules:
+  - id: liquid-unescaped-metadata
+    languages: [generic]
+    severity: ERROR
+    message: "Escape site/page/navigation metadata before inserting it into HTML"
+    pattern-regex: '\{\{\s*(?:site\.title|page\.title|p\.title|c\.title|site\.flow\.(?:logo|favicon|footer_text|search_placeholder))\b(?![^}]*\|\s*escape\b)[^}]*\}\}'

@@ -1,5 +1,5 @@
 <footer class="footer py-4">
   <div class="content has-text-centered is-size-7">
-    <p>{{ site.title }}{% if site.flow.footer_text %} · {{ site.flow.footer_text }}{% endif %}</p>
+    <p>{{ site.title | escape }}{% if site.flow.footer_text %} · {{ site.flow.footer_text | escape }}{% endif %}</p>
   </div>
 </footer>
