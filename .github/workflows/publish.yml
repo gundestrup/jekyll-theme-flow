@@ -46,7 +46,8 @@ jobs:
           working-directory: jekyll-theme-flow
 
       - name: Install Semgrep
-        run: pip3 install --only-binary :all: "semgrep==1.176.0"
+        run: |
+          pip3 install --only-binary :all: "semgrep==1.176.0"
 
       - name: Verify version and run release checks
         working-directory: jekyll-theme-flow
