@@ -1,0 +1,13 @@
+<div class="columns is-gapless m-0 flow-shell" x-data="{ menu: false }">
+  <div class="column">
+    {% include navbar.html mode="mobile-only" %}
+    <main class="section">
+      <div class="content">
+        {{ content }}
+      </div>
+    </main>
+  </div>
+  <aside class="column is-narrow flow-sidebar flow-right has-background-light" :class="{ 'is-hidden-mobile': !menu }" @click.outside="menu = false">
+    {% include sidebar.html %}
+  </aside>
+</div>

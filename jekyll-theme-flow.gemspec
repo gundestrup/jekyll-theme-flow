@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+Gem::Specification.new do |spec|
+  spec.name          = "jekyll-theme-flow"
+  spec.version       = "0.1.0"
+  spec.authors       = ["Svend Gundestrup"]
+  spec.email         = ["svend@gundestrup.dk"]
+
+  spec.summary       = "A Bulma + Alpine.js Jekyll theme with switchable standard layouts"
+  spec.homepage      = "https://github.com/gundestrup/jekyll-theme-flow"
+  spec.license       = "MIT"
+
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+
+  spec.files = `git ls-files -z`.split("\x0").select do |f|
+    f.match?(%r{\A(?:assets|_includes|_layouts|_sass|LICENSE|README)}i)
+  end
+
+  spec.required_ruby_version = ">= 3.1"
+
+  spec.add_runtime_dependency "jekyll", ">= 4.3", "< 5.0"
+end

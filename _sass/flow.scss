@@ -1,0 +1,65 @@
+// jekyll-theme-flow — app shell + small tweaks on top of Bulma.
+// Consumers can override Bulma via `sass` config or their own _sass files.
+
+@use "bulma";
+
+[x-cloak] {
+  display: none !important;
+}
+
+.flow-shell {
+  min-height: 100vh;
+}
+
+.flow-sidebar {
+  width: 18rem;
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .flow-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--bulma-border);
+
+    &.flow-right {
+      border-right: 0;
+      border-left: 1px solid var(--bulma-border);
+    }
+  }
+}
+
+@media (max-width: 1023px) {
+  .flow-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    max-width: 85vw;
+    overflow-y: auto;
+    z-index: 40;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
+
+    &.flow-right {
+      left: auto;
+      right: 0;
+    }
+  }
+}
+
+.flow-chevron {
+  transition: transform 150ms ease;
+
+  &.is-open {
+    transform: rotate(90deg);
+  }
+}
+
+.flow-brand-icon {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.35em;
+  vertical-align: -0.125em;
+}

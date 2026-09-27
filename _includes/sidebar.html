@@ -1,0 +1,10 @@
+<div class="p-4">
+  <a class="is-size-5 has-text-weight-semibold" href="{{ '/' | relative_url }}">
+    {%- if site.flow.logo %}<img class="flow-brand-icon" src="{{ site.flow.logo | relative_url }}" alt="">{% endif %}
+    {{- site.title -}}
+  </a>
+</div>
+<nav class="menu px-4 pb-4" aria-label="site navigation">
+  {%- assign nav_roots = site.html_pages | where_exp: "p", "p.title" | where_exp: "p", "p.nav_exclude != true" | where_exp: "p", "p.parent == nil" | sort: "nav_order" -%}
+  {% include nav_tree.html pages=nav_roots %}
+</nav>

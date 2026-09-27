@@ -1,0 +1,32 @@
+{%- comment -%}
+  Recursive nav tree. include.pages = array of pages at this level.
+  Children are matched via `parent: <parent title>` front matter.
+  Auto-opens when the current page is this node, a child (`parent`),
+  or a grandchild (`grand_parent`).
+{%- endcomment -%}
+<ul class="menu-list">
+  {%- for p in include.pages -%}
+  {%- assign kids = site.html_pages | where: "parent", p.title | where_exp: "k", "k.nav_exclude != true" | sort: "nav_order" -%}
+  {%- assign is_active = false -%}
+  {%- if p.url == page.url -%}{%- assign is_active = true -%}{%- endif -%}
+  {%- if kids.size > 0 -%}
+  {%- assign start_open = false -%}
+  {%- if is_active or page.parent == p.title or page.grand_parent == p.title -%}{%- assign start_open = true -%}{%- endif %}
+  <li x-data="{ open: {{ start_open }} }">
+    <div class="is-flex is-justify-content-space-between is-align-items-center">
+      <a href="{{ p.url | relative_url }}"{% if is_active %} class="is-active"{% endif %}>{{ p.title }}</a>
+      <button class="button is-ghost is-small px-2" @click="open = !open" :aria-expanded="open" aria-label="Toggle {{ p.title }}">
+        <span class="icon flow-chevron" :class="{ 'is-open': open }">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </span>
+      </button>
+    </div>
+    <div x-show="open" x-cloak>
+      {% include nav_tree.html pages=kids %}
+    </div>
+  </li>
+  {%- else -%}
+  <li><a href="{{ p.url | relative_url }}"{% if is_active %} class="is-active"{% endif %}>{{ p.title }}</a></li>
+  {%- endif -%}
+  {%- endfor %}
+</ul>

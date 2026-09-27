@@ -1,0 +1,6 @@
+title: Flow Demo
+description: Demo site for jekyll-theme-flow
+
+flow:
+  layout: sidebar-left   # sidebar-left | sidebar-right | topnav | bare
+  # logo: /assets/images/logo.svg
