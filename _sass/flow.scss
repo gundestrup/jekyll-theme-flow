@@ -63,3 +63,62 @@
   margin-right: 0.35em;
   vertical-align: -0.125em;
 }
+
+// Search slot — desktop top bar in sidebar shells, navbar-end in topnav
+.flow-topbar {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--bulma-border);
+}
+
+.flow-search {
+  position: relative;
+  width: 100%;
+
+  .navbar-item & {
+    width: auto;
+  }
+}
+
+.flow-search-results {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  display: none;
+  max-height: 24rem;
+  padding: 0.25rem 0;
+  margin: 0.25rem 0 0;
+  overflow-y: auto;
+  list-style: none;
+  background: var(--bulma-scheme-main);
+  border: 1px solid var(--bulma-border);
+  border-radius: var(--bulma-radius);
+  box-shadow: var(--bulma-shadow);
+  z-index: 50;
+
+  &[aria-hidden="false"] {
+    display: block;
+  }
+
+  .navbar-item & {
+    left: auto;
+    min-width: 18rem;
+  }
+}
+
+.client-search-dropdown-item {
+  padding: 0;
+  margin: 0;
+}
+
+.client-search-dropdown-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  color: var(--bulma-text);
+  text-decoration: none;
+}
+
+.client-search-dropdown-link:hover,
+.client-search-dropdown-item[aria-selected="true"] .client-search-dropdown-link {
+  background: var(--bulma-scheme-main-bis);
+}

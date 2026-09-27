@@ -4,3 +4,18 @@ description: Demo site for jekyll-theme-flow
 flow:
   layout: sidebar-left   # sidebar-left | sidebar-right | topnav | bare
   # logo: /assets/images/logo.svg
+  # logo_enabled: true
+  # favicon: /assets/favicon.ico
+  # favicon_enabled: true
+  # search_placeholder: Search
+
+client_search:
+  enabled: true
+  engine: minisearch
+  include_pages: true
+  dropdown:
+    enabled: true
+    redirect_url: /search/
+
+plugins:
+  - jekyll-client-search

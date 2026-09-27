@@ -8,6 +8,7 @@
 {% assign shell = "shells/" | append: flow_variant | append: ".html" %}
 {% include {{ shell }} %}
 {% include footer.html %}
+{% if site.client_search.enabled %}{% search_dropdown scripts_only %}{% endif %}
 <script src="{{ '/assets/js/alpine.min.js' | relative_url }}" defer></script>
 </body>
 </html>

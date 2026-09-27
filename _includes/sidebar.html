@@ -1,6 +1,6 @@
 <div class="p-4">
   <a class="is-size-5 has-text-weight-semibold" href="{{ '/' | relative_url }}">
-    {%- if site.flow.logo %}<img class="flow-brand-icon" src="{{ site.flow.logo | relative_url }}" alt="">{% endif %}
+    {%- if site.flow.logo and site.flow.logo_enabled != false %}<img class="flow-brand-icon" src="{{ site.flow.logo | relative_url }}" alt="">{% endif %}
     {{- site.title -}}
   </a>
 </div>

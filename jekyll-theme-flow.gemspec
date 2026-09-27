@@ -8,15 +8,16 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "A Bulma + Alpine.js Jekyll theme with switchable standard layouts"
   spec.homepage      = "https://github.com/gundestrup/jekyll-theme-flow"
-  spec.license       = "MIT"
+  spec.license       = "AGPL-3.0-or-later"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
   spec.files = `git ls-files -z`.split("\x0").select do |f|
-    f.match?(%r{\A(?:assets|_includes|_layouts|_sass|LICENSE|README)}i)
+    f.match?(%r{\A(?:assets|_includes|_layouts|_sass|search\.md|LICENSE|README)}i)
   end
 
   spec.required_ruby_version = ">= 3.1"
 
   spec.add_runtime_dependency "jekyll", ">= 4.3", "< 5.0"
+  spec.add_runtime_dependency "jekyll-client-search", ">= 0.3.4"
 end

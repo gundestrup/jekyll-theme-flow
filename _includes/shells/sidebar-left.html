@@ -4,6 +4,11 @@
   </aside>
   <div class="column">
     {% include navbar.html mode="mobile-only" %}
+    {% if site.client_search.enabled %}
+    <div class="flow-topbar">
+      {% include search_slot.html %}
+    </div>
+    {% endif %}
     <main class="section">
       <div class="content">
         {{ content }}

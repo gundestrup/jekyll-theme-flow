@@ -51,13 +51,44 @@ nav_exclude: true    # optional: hide from nav
 The current page's branch opens automatically; parents get a chevron
 toggle.
 
+## Search (jekyll-client-search)
+
+The theme integrates
+[jekyll-client-search](https://github.com/gundestrup/jekyll-client-search)
+(a runtime dependency — it's pulled in automatically). Enable it:
+
+```yaml
+client_search:
+  enabled: true
+  engine: minisearch        # or elasticlunr / semantic
+  collections: [posts]      # and/or include_pages: true
+  dropdown:
+    enabled: true
+    redirect_url: /search/
+```
+
+When enabled:
+
+- **sidebar layouts** render a search bar in a top bar above the content
+- **topnav** renders a smaller search field on the right of the navbar
+- **bare** renders no search chrome
+- a `/search/` page ships with the theme (override it by adding your own
+  `search.md`)
+
+All `client_search` options (fuzzy MiniSearch, Ollama embeddings, related
+results, …) work as documented in the gem.
+
 ## Other config
 
 ```yaml
 flow:
   layout: sidebar-left
-  logo: /assets/logo.svg        # optional, rendered beside site.title
-  footer_text: "Powered by ..." # optional footer line
+  logo: /assets/logo.svg         # brand icon next to site.title (all pages)
+  logo_enabled: true             # set false to hide without removing logo
+  favicon: /assets/favicon.ico   # <link rel="icon">
+  favicon_enabled: true          # set false to disable
+  search_placeholder: "Search"   # placeholder text in the search field
+  footer_text: "Powered by ..."  # optional footer line
 ```
 
 ## Customization surface
