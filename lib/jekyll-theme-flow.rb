@@ -13,8 +13,15 @@ require "jekyll-sitemap"
 #
 #   flow.sitemap: false                  - drop the sitemap generator
 #   flow.archive.sitemap_exclude: false  - keep archived pages in sitemap.xml
+#
+# It also injects default config keys the user can still override —
+# currently `sass.quiet_deps`, which hides deprecation noise from
+# vendored Bulma while keeping warnings from site Sass visible.
 
 Jekyll::Hooks.register :site, :after_init do |site|
+  sass = (site.config["sass"] ||= {})
+  sass["quiet_deps"] = true unless sass.key?("quiet_deps")
+
   next unless site.config.dig("flow", "sitemap") == false
 
   site.generators.delete_if do |generator|

@@ -14,3 +14,5 @@
 - Theme lib (`lib/jekyll-theme-flow.rb`): bundling `jekyll-sitemap` as a runtime
   dependency (auto-loaded with the theme), a `flow.sitemap` disable switch, and a
   hook that excludes archived pages from sitemap.xml when the theme is plugin-loaded.
+- Config defaults injection: plugin-loaded consumers get `sass.quiet_deps: true`
+  (silences vendored Bulma deprecation warnings) unless they set it themselves.

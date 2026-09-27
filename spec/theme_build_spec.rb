@@ -246,6 +246,17 @@ RSpec.describe "jekyll-theme-flow site build" do
     end
   end
 
+  it "injects config defaults the consumer can still override" do
+    jekyll_build(config: config, files: files) do |site|
+      expect(site.config.dig("sass", "quiet_deps")).to be true
+    end
+
+    overridden = config.merge("sass" => { "quiet_deps" => false })
+    jekyll_build(config: overridden, files: files) do |site|
+      expect(site.config.dig("sass", "quiet_deps")).to be false
+    end
+  end
+
   it "honours the sitemap config switches" do
     no_sitemap = config.merge("flow" => { "layout" => "sidebar-left", "sitemap" => false })
     jekyll_build(config: no_sitemap, files: files) do |site|

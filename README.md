@@ -28,6 +28,14 @@ also auto-requires the theme's runtime dependencies
 (`jekyll-client-search`, `jekyll-icon-flow`, `jekyll-sitemap`), so the
 tags, search assets and `sitemap.xml` work without listing them.
 
+Every `flow.*`/`icon_flow.*`/`client_search.*` option has a sensible
+default — the theme renders with zero config beyond `theme:`, and each
+key can be overridden individually. When the theme is plugin-loaded it
+also injects one config-level default that Liquid defaults can't reach:
+`sass.quiet_deps: true`, which silences deprecation noise from the
+vendored Bulma Sass while keeping warnings from *your* Sass visible
+(set it explicitly to `false` to opt out).
+
 To additionally enable the theme's own hooks (automatic sitemap/noindex
 exclusion for archived pages and the `flow.sitemap` switch), load it as
 a plugin too — either list it under `plugins:`:
