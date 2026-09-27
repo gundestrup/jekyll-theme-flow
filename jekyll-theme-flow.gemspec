@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   spec.metadata["rubygems_mfa_required"] = "true"
 
-  spec.files = Dir["assets/**/*", "_includes/**/*", "_layouts/**/*", "_sass/**/*",
+  spec.files = Dir["assets/**/*", "lib/**/*", "_includes/**/*", "_layouts/**/*", "_sass/**/*",
                    "CHANGELOG.md", "LICENSE.txt", "README.md"].select { |path| File.file?(path) }
 
   spec.required_ruby_version = ">= 3.3"
@@ -21,4 +21,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "jekyll", ">= 4.3", "< 5.0"
   spec.add_dependency "jekyll-client-search", ">= 0.3.4"
   spec.add_dependency "jekyll-icon-flow", ">= 0.1"
+  spec.add_dependency "jekyll-sitemap", ">= 1.4", "< 2.0"
 end

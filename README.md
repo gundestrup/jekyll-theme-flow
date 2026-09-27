@@ -11,6 +11,34 @@ standard layout shells you can switch per site or per page.
 No Node toolchain required — Bulma compiles through Jekyll's own Sass
 pipeline, and Alpine is vendored into the theme.
 
+## Installation
+
+```ruby
+# Gemfile
+gem "jekyll-theme-flow"
+```
+
+```yaml
+# _config.yml
+theme: jekyll-theme-flow
+```
+
+`theme:` alone gives you layouts, includes, Sass and assets — Jekyll
+also auto-requires the theme's runtime dependencies
+(`jekyll-client-search`, `jekyll-icon-flow`, `jekyll-sitemap`), so the
+tags, search assets and `sitemap.xml` work without listing them.
+
+To additionally enable the theme's own hooks (automatic sitemap/noindex
+exclusion for archived pages and the `flow.sitemap` switch), load it as
+a plugin too — either list it under `plugins:`:
+
+```yaml
+plugins:
+  - jekyll-theme-flow
+```
+
+or move the gem into the `:jekyll_plugins` group in your Gemfile.
+
 ## Layouts
 
 Set a site-wide default in `_config.yml`:
@@ -179,11 +207,21 @@ nav_exclude: true
 
 It lists every `layout: archive` page sorted by `archive_link_current`.
 
-**Sitemap exclusion** — Jekyll themes cannot ship plugin hooks, and
-layout front matter never reaches `page.data` where `jekyll-sitemap`
-looks. The zero-plugin convention is scoped front-matter defaults — keep
-archived sources in one directory and let `_config.yml` apply the
-contract:
+**Sitemap exclusion** — when the theme is also loaded as a plugin
+(`plugins:` list or the `:jekyll_plugins` Gemfile group — see
+Installation), `jekyll-sitemap` is pulled in automatically and archived
+pages are excluded from `sitemap.xml` by a built-in hook. No config or
+front matter needed beyond `layout: archive`. Both switches:
+
+```yaml
+flow:
+  sitemap: false                  # drop the sitemap generator entirely
+  archive:
+    sitemap_exclude: false        # keep archived pages in sitemap.xml
+```
+
+If the theme is consumed via `theme:` only (no plugin load), the hook
+can't run — the equivalent convention is scoped front-matter defaults:
 
 ```yaml
 defaults:

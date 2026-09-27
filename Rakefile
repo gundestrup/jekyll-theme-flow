@@ -50,7 +50,8 @@ task :package do
   spec = Gem::Specification.load(GEMSPEC)
   file = Gem::Package.build(spec)
   contents = Gem::Package.new(file).contents
-  required = %w[LICENSE.txt README.md CHANGELOG.md _layouts/default.html _layouts/search.html
+  required = %w[LICENSE.txt README.md CHANGELOG.md lib/jekyll-theme-flow.rb
+                _layouts/default.html _layouts/search.html
                 _layouts/archive.html _layouts/archive-index.html _includes/archive_versions.html
                 _includes/search_slot.html _sass/flow.scss assets/css/theme.scss
                 assets/js/alpine.min.js]
@@ -61,7 +62,7 @@ end
 
 task :semgrep do
   sh "semgrep", "scan", "--config", ".semgrep.yml", "--error", "--metrics", "off",
-     "_includes/", "_layouts/"
+     "lib/", "_includes/", "_layouts/"
 end
 
 task quick: %i[rubocop spec]

@@ -1,5 +1,6 @@
 title: Flow Demo
 description: Demo site for jekyll-theme-flow
+url: http://localhost:4000
 
 flow:
   layout: sidebar-left   # sidebar-left | sidebar-right | topnav | bare
@@ -27,6 +28,7 @@ client_search:
 plugins:
   - jekyll-client-search
   - jekyll-icon-flow
+  - jekyll-theme-flow   # loads the archive sitemap hook + auto-loads jekyll-sitemap
 
 # Archive convention: pages under archive/ get layout + sitemap/nav
 # exclusion via front-matter defaults (see README "Archiving pages").

@@ -11,3 +11,6 @@
   scoped-defaults convention for sitemap exclusion.
 - Navigation: `is-active` on the current item and its direct parent in the sidebar
   tree and topnav dropdown; optional `icon:` front matter rendered in both branches.
+- Theme lib (`lib/jekyll-theme-flow.rb`): bundling `jekyll-sitemap` as a runtime
+  dependency (auto-loaded with the theme), a `flow.sitemap` disable switch, and a
+  hook that excludes archived pages from sitemap.xml when the theme is plugin-loaded.

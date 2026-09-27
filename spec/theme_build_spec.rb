@@ -69,8 +69,9 @@ RSpec.describe "jekyll-theme-flow site build" do
   let(:config) do
     {
       "title" => "Spec Site",
+      "url" => "http://example.test",
       "theme" => "jekyll-theme-flow",
-      "plugins" => %w[jekyll-client-search jekyll-icon-flow],
+      "plugins" => %w[jekyll-client-search jekyll-icon-flow jekyll-theme-flow],
       "flow" => { "layout" => "sidebar-left" },
       "client_search" => {
         "enabled" => true,
@@ -232,6 +233,30 @@ RSpec.describe "jekyll-theme-flow site build" do
 
       topnav_child = site.pages.find { |p| p.url == "/topnav-child.html" }.output
       expect(topnav_child).to include('class="navbar-link is-active" href="/nav-page.html"')
+    end
+  end
+
+  it "generates a sitemap that excludes archived pages" do
+    jekyll_build(config: config, files: files) do |site|
+      sitemap = File.read(File.join(site.dest, "sitemap.xml"))
+
+      expect(sitemap).to include("/section.html")
+      expect(sitemap).not_to include("/archive/old-section.html")
+      expect(sitemap).not_to include("/archive/older-section.html")
+    end
+  end
+
+  it "honours the sitemap config switches" do
+    no_sitemap = config.merge("flow" => { "layout" => "sidebar-left", "sitemap" => false })
+    jekyll_build(config: no_sitemap, files: files) do |site|
+      expect(File.exist?(File.join(site.dest, "sitemap.xml"))).to be false
+    end
+
+    keep = config.merge("flow" => { "layout" => "sidebar-left",
+                                    "archive" => { "sitemap_exclude" => false } })
+    jekyll_build(config: keep, files: files) do |site|
+      sitemap = File.read(File.join(site.dest, "sitemap.xml"))
+      expect(sitemap).to include("/archive/old-section.html")
     end
   end
 

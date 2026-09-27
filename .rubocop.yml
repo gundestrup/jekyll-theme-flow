@@ -13,6 +13,11 @@ Style/Documentation:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
+# Bundler-style hyphenated gem entrypoint
+Naming/FileName:
+  Exclude:
+    - lib/jekyll-theme-flow.rb
+
 Layout/LineLength:
   Max: 100
 

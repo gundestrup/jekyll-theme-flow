@@ -17,6 +17,7 @@ PATH
       jekyll (>= 4.3, < 5.0)
       jekyll-client-search (>= 0.3.4)
       jekyll-icon-flow (>= 0.1)
+      jekyll-sitemap (>= 1.4, < 2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -100,6 +101,8 @@ GEM
       webrick (~> 1.7)
     jekyll-sass-converter (3.1.0)
       sass-embedded (~> 1.75)
+    jekyll-sitemap (1.4.0)
+      jekyll (>= 3.7, < 5.0)
     jekyll-test-harness (0.1.0.alpha)
       jekyll (>= 3.8.5, < 5.0)
     jekyll-watch (2.2.1)
@@ -271,6 +274,7 @@ CHECKSUMS
   jekyll-client-search (0.3.4)
   jekyll-icon-flow (0.1.0)
   jekyll-sass-converter (3.1.0) sha256=83925d84f1d134410c11d0c6643b0093e82e3a3cf127e90757a85294a3862443
+  jekyll-sitemap (1.4.0) sha256=0de08c5debc185ea5a8f980e1025c7cd3f8e0c35c8b6ef592f15c46235cf4218
   jekyll-test-harness (0.1.0.alpha) sha256=2b134cbe6c4db4f3a7a6d9e0be8b53ba18767c3c44a95366886924a306bfd98c
   jekyll-theme-flow (0.1.0)
   jekyll-watch (2.2.1) sha256=bc44ed43f5e0a552836245a54dbff3ea7421ecc2856707e8a1ee203a8387a7e1
