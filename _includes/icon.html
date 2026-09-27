@@ -1,15 +1,10 @@
 {%- comment -%}
-  Render an inline SVG icon. Usage:
+  Thin wrapper over the {% icon %} tag from jekyll-icon-flow, kept for
+  sites/includes that prefer the include calling convention:
     {% include icon.html name="search" %}
-    {% include icon.html name="github" pack="simple-icons" size="1.5em" %}
-  Pack defaults to site.flow.icon_pack ("lucide" when unset).
-  Set flow.icons_enabled: false to disable all icon rendering
-  (theme chrome icons included).
-  A site may define _includes/icons/custom/<name>.svg (e.g. SVGs
-  downloaded from svgrepo.com) and use pack="custom".
+    {% include icon.html name="github" pack="simple" size="1.5em" %}
+  Bracket access on include[...] avoids Hash method collisions and lets
+  unset optional params resolve to nil — the tag drops them.
+  Configure via icon_flow: in _config.yml (pack, enabled, custom_dir).
 {%- endcomment -%}
-{%- if site.flow.icons_enabled != false -%}
-{%- assign _pack = include.pack | default: site.flow.icon_pack | default: "lucide" -%}
-{%- assign _path = "icons/" | append: _pack | append: "/" | append: include.name | append: ".svg" -%}
-<span class="flow-icon"{% if include.size %} style="font-size:{{ include.size }}"{% endif %}>{% include {{ _path }} %}</span>
-{%- endif -%}
+{% icon include.name pack: include["pack"] size: include["size"] class: include["class"] title: include["title"] %}

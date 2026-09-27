@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "jekyll", ">= 4.3", "< 5.0"
   spec.add_runtime_dependency "jekyll-client-search", ">= 0.3.4"
+  spec.add_runtime_dependency "jekyll-icon-flow", ">= 0.1"
 end
