@@ -17,7 +17,7 @@
       <a href="{{ p.url | relative_url }}"{% if is_active %} class="is-active"{% endif %}>{{ p.title }}</a>
       <button class="button is-ghost is-small px-2" @click="open = !open" :aria-expanded="open" aria-label="Toggle {{ p.title }}">
         <span class="icon flow-chevron" :class="{ 'is-open': open }">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          {% include icon.html name="chevron-right" %}
         </span>
       </button>
     </div>

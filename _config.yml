@@ -8,6 +8,8 @@ flow:
   # favicon: /assets/favicon.ico
   # favicon_enabled: true
   # search_placeholder: Search
+  # icon_pack: lucide        # lucide | simple-icons | custom
+  # icons_enabled: true      # false = {% include icon.html %} renders nothing
 
 client_search:
   enabled: true

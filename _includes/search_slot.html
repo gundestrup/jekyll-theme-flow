@@ -10,9 +10,7 @@
            placeholder="{{ site.flow.search_placeholder | default: "Search" }}"
            aria-expanded="false" aria-controls="flow-search-results-{{ slot_id }}"
            data-cs-dropdown-input>
-    <span class="icon is-left" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </span>
+    <span class="icon is-left" aria-hidden="true">{% include icon.html name="search" size="0.875em" %}</span>
   </form>
   <ul id="flow-search-results-{{ slot_id }}" class="flow-search-results"
       role="listbox" aria-hidden="true" data-cs-dropdown-results></ul>

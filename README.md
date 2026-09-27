@@ -78,6 +78,43 @@ When enabled:
 All `client_search` options (fuzzy MiniSearch, Ollama embeddings, related
 results, …) work as documented in the gem.
 
+## Icons
+
+The theme vendors two icon packs under `_includes/icons/` and renders them
+inline so they scale with `font-size` and inherit `currentColor`:
+
+- **lucide** (ISC) — UI icons; also used for the theme's own chrome
+  (nav chevron, search icon). 29 icons: `menu`, `search`, `x`,
+  `chevron-*`, `home`, `file-text`, `folder`, `copy`, `check`,
+  `external-link`, `arrow-*`, `download`, `mail`, `rss`, `info`,
+  `triangle-alert`, `map`, `map-pin`, `link`, `printer`, `calendar`,
+  `tag`, `sun`, `moon`.
+- **simple-icons** (CC0) — brand icons: `github`, `x`, `facebook`,
+  `instagram`, `youtube`, `mastodon`, `rss`, `bluesky`, `discord`,
+  `medium`, `telegram`, `tiktok`, `spotify`.
+  (LinkedIn is unavailable — it was removed upstream from simple-icons.)
+
+```liquid
+{% include icon.html name="search" %}
+{% include icon.html name="github" pack="simple-icons" size="1.5em" %}
+```
+
+```yaml
+flow:
+  icon_pack: lucide      # default pack when pack= is omitted
+  icons_enabled: true    # false = icon.html renders nothing (incl. chrome)
+```
+
+**Custom icons** (e.g. from [svgrepo.com](https://www.svgrepo.com/) — an
+aggregator with no bundleable pack): download the SVG into your site's
+`_includes/icons/custom/<name>.svg`, then
+`{% include icon.html name="<name>" pack="custom" %}`. Site includes
+override theme includes, so you can also shadow a vendored icon by using
+the same path.
+
+To use more lucide/simple-icons than the vendored subset, drop additional
+SVGs into `_includes/icons/<pack>/` in your site the same way.
+
 ## Other config
 
 ```yaml
@@ -88,6 +125,8 @@ flow:
   favicon: /assets/favicon.ico   # <link rel="icon">
   favicon_enabled: true          # set false to disable
   search_placeholder: "Search"   # placeholder text in the search field
+  icon_pack: lucide              # lucide | simple-icons | custom
+  icons_enabled: true            # master switch for {% include icon.html %}
   footer_text: "Powered by ..."  # optional footer line
 ```
 

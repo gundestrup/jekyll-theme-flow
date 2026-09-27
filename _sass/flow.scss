@@ -64,6 +64,22 @@
   vertical-align: -0.125em;
 }
 
+// {% include icon.html %} — vendored SVGs scale with font-size and
+// inherit currentColor
+.flow-icon,
+.flow-icon svg {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
+// simple-icons ship without a fill attribute; lucide sets fill="none"
+// on the svg element, so this only recolors brand icons
+.flow-icon svg:not([fill]) {
+  fill: currentColor;
+}
+
 // Search slot — desktop top bar in sidebar shells, navbar-end in topnav
 .flow-topbar {
   padding: 0.75rem 1.5rem;
