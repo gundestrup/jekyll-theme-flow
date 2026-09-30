@@ -61,8 +61,10 @@ task :package do
 end
 
 task :semgrep do
-  sh "semgrep", "scan", "--config", ".semgrep.yml", "--error", "--metrics", "off",
-     "lib/", "_includes/", "_layouts/"
+  # Scan the repo root: semgrep limits itself to git-tracked files anyway,
+  # and explicit dirs turn into hard "invalid scanning root" errors if a
+  # directory is ever renamed or removed.
+  sh "semgrep", "scan", "--config", ".semgrep.yml", "--error", "--metrics", "off", "."
 end
 
 task quick: %i[rubocop spec]

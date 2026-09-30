@@ -29,14 +29,14 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: gundestrup/jekyll-client-search
-          ref: 8e051ab30fc4df0839c6458951119373b953268a
+          ref: 99cfe8c40ff3e4d96a4cca8d95d1f4604e53b0be
           path: jekyll-client-search
 
       - name: Check out jekyll-icon-flow
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: gundestrup/jekyll-icon-flow
-          ref: dcaa01707e37fd9ae12c7fb9357f6b3c10d882b4
+          ref: ff9061771a9720dd550f77d903a8e7c3f6ea8ac9
           path: jekyll-icon-flow
 
       - name: Set up Ruby
