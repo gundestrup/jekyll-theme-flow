@@ -1,0 +1,36 @@
+{
+  "repo_notes": [
+    { "content": "Jekyll theme gem (Ruby >= 3.3) built on Bulma CSS + Alpine.js, offering named layout shells (sidebar-left, sidebar-right, topnav, bare) switchable site-wide via flow.layout or per page via flow_layout front matter." },
+    { "content": "No Node toolchain: Bulma compiles through Jekyll's own Sass pipeline and Alpine is vendored into the theme." },
+    { "content": "theme: alone auto-requires runtime deps (jekyll-client-search, jekyll-icon-flow, jekyll-sitemap). Loading the gem as a plugin too (plugins: or :jekyll_plugins group) additionally enables theme hooks — automatic sitemap/noindex exclusion for archived pages and the flow.sitemap switch — plus a config-level sass.quiet_deps default Liquid can't reach." },
+    { "content": "Every flow.*/icon_flow.*/client_search.* option has a sensible default — the theme renders with zero config beyond theme: and each key overrides individually." },
+    { "content": "Deliberately no Codecov badge: meaningful coverage is consumer-site/Jekyll behavior rather than a misleading Ruby percentage." },
+    { "content": "See README.md for the full layout/config reference and release notes." }
+  ],
+  "pages": [
+    {
+      "title": "Architecture Overview",
+      "purpose": "Theme structure: layouts, includes, Sass/Bulma pipeline, vendored Alpine.js, and the theme-vs-plugin dual-loading model",
+      "page_notes": [{ "content": "Include Mermaid diagram: site _config -> theme defaults -> layout shells -> includes -> plugins" }]
+    },
+    {
+      "title": "Layout Shells",
+      "purpose": "The four named shells (sidebar-left/right, topnav, bare): what each renders, flow.layout default vs flow_layout per-page override, and nav tree/dropdown behavior",
+      "parent": "Architecture Overview"
+    },
+    {
+      "title": "Theme Hooks and Config",
+      "purpose": "Plugin-mode extras: archive sitemap/noindex exclusion, flow.sitemap switch, sass.quiet_deps injection, and why they need plugin loading beyond theme:",
+      "parent": "Architecture Overview"
+    },
+    {
+      "title": "Bundled Integrations",
+      "purpose": "Auto-required runtime deps — jekyll-client-search (search assets/tags), jekyll-icon-flow (icon tags), jekyll-sitemap — and how their config keys default under the theme",
+      "parent": "Architecture Overview"
+    },
+    {
+      "title": "Testing and Release",
+      "purpose": "Quality gates (RuboCop/Semgrep/SonarCloud/CodeFactor — no Codecov by design), and tag-push release.yml trusted publishing to RubyGems"
+    }
+  ]
+}
