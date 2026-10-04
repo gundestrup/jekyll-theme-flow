@@ -6,64 +6,41 @@ on:
       - "v*"
 
 permissions:
-  contents: read
+  contents: write
+  id-token: write
 
 jobs:
   release:
     name: Build and publish RubyGem
     runs-on: ubuntu-latest
     environment: release
-    permissions:
-      contents: write
-      id-token: write
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          path: jekyll-theme-flow
-          persist-credentials: false
-
-      # Gemfile uses path: "../<sibling>" — the siblings must sit next to
-      # this checkout; refs are pinned SHAs (update them when the
-      # published theme should build against newer sibling code).
-      - name: Check out jekyll-client-search
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: gundestrup/jekyll-client-search
-          ref: 99cfe8c40ff3e4d96a4cca8d95d1f4604e53b0be
-          path: jekyll-client-search
-          persist-credentials: false
-
-      - name: Check out jekyll-icon-flow
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: gundestrup/jekyll-icon-flow
-          ref: 4ace56ab7a6cf5fe01ebde6d6c816fe7f6a2a233 # v0.1.0
-          path: jekyll-icon-flow
           persist-credentials: false
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@984c0c890880bbf811283d6f09c4607c62d210a4 # v1.323.0
         with:
           bundler-cache: true
-          working-directory: jekyll-theme-flow
           # no ruby-version: — setup-ruby reads .ruby-version (single source)
 
       - name: Install Semgrep
         run: pip3 install --only-binary ":all:" semgrep==1.176.0
 
       - name: Verify version and run release checks
-        working-directory: jekyll-theme-flow
         run: |
           test "v$(bundle exec rake version:show)" = "$GITHUB_REF_NAME"
           bundle exec rake version:pre_release
 
+      - name: Build gem
+        run: gem build jekyll-theme-flow.gemspec
+
       - name: Upload gem to GitHub release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
-          files: "jekyll-theme-flow/*.gem"
+          files: jekyll-theme-flow-*.gem
 
       - name: Publish to RubyGems
         uses: rubygems/release-gem@7f9650160c1a4e7989fdc9855807bdbd421d8b6b # v1.4.1
-        with:
-          working-directory: jekyll-theme-flow

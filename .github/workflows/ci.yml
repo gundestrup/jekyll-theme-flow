@@ -20,40 +20,19 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          path: jekyll-theme-flow
-
-      # The Gemfile uses path dependencies on sibling repos for local
-      # development; check them out side-by-side so Bundler resolves them.
-      - name: Check out jekyll-client-search
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: gundestrup/jekyll-client-search
-          ref: 99cfe8c40ff3e4d96a4cca8d95d1f4604e53b0be
-          path: jekyll-client-search
-
-      - name: Check out jekyll-icon-flow
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: gundestrup/jekyll-icon-flow
-          ref: ff9061771a9720dd550f77d903a8e7c3f6ea8ac9
-          path: jekyll-icon-flow
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@984c0c890880bbf811283d6f09c4607c62d210a4 # v1.323.0
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-          working-directory: jekyll-theme-flow
 
       - name: Install Semgrep
         run: |
           pip3 install --only-binary :all: "semgrep==1.176.0"
 
       - name: Audit Ruby dependencies
-        working-directory: jekyll-theme-flow
         run: bundle exec bundle-audit check --update
 
       - name: Run checks
-        working-directory: jekyll-theme-flow
         run: bundle exec rake ci

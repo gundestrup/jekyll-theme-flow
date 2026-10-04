@@ -5,8 +5,8 @@ source "https://rubygems.org"
 gemspec
 
 group :jekyll_plugins do
-  gem "jekyll-client-search", path: "../jekyll-client-search"
-  gem "jekyll-icon-flow", path: "../jekyll-icon-flow"
+  gem "jekyll-client-search", ">= 0.3.4"
+  gem "jekyll-icon-flow", ">= 0.1"
 end
 
 group :development do
