@@ -3,6 +3,7 @@
 require "rspec/core/rake_task"
 require "rubocop/rake_task"
 require "bundler/audit/task"
+require "bundler/gem_tasks"
 require "rubygems/package"
 
 RSpec::Core::RakeTask.new(:spec)
@@ -72,7 +73,7 @@ task ci: %i[rubocop bundle:audit semgrep spec version:check package]
 task "version:pre_release" => %i[ci version:check_changelog]
 
 desc "Build the demo site"
-task :build do
+task :demo_build do
   sh "bundle exec jekyll build"
 end
 

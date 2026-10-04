@@ -1,5 +1,18 @@
 # TODO — functions learned from rutenskiklub
 
+**Status:** items 1, 2, 3, 5, 6 implemented in the theme
+(`_layouts/archive.html`, `_layouts/archive-index.html`,
+`_includes/archive_versions.html`, `noindex` in `head.html`, navbar +
+nav_tree `is-active`/icons). Item 4 resolved via option (a) — built
+into the theme: `jekyll-sitemap` is a runtime dependency (auto-loaded by
+Jekyll's theme-deps mechanism), and `lib/jekyll-theme-flow.rb` ships a
+`:pages, :post_init` hook excluding `layout: archive` pages when the
+theme is plugin-loaded (`plugins:` list / `:jekyll_plugins` group),
+plus a `flow.sitemap` disable switch. Scoped defaults (option b) remain
+documented for `theme:`-only consumers.
+Item 7 respected: contracts live in head-side checks and config
+defaults, never layout front matter.
+
 Candidate theme features extracted from the rutenskiklub site
 (bulma-clean-theme + site-owned overrides). Each item below describes
 what the site had to build itself — i.e. what a theme should ship.
