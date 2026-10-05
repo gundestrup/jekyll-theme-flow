@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- SimpleCov coverage instrumentation matching the fleet pattern:
+  `lib/**/*.rb` tracked, Cobertura formatter and a 90% floor on CI,
+  skippable via `COVERAGE=false`. Current suite covers 100% of the
+  theme's Ruby lib (13/13 lines).
+
 ## [0.1.0] - 2026-10-04
 
 - Bulma and Alpine.js theme with sidebar-left, sidebar-right, topnav and bare layouts.
