@@ -3,12 +3,13 @@
 [![Status: Active](https://img.shields.io/badge/status-active-success)](https://github.com/gundestrup/jekyll-theme-flow)
 [![CI](https://github.com/gundestrup/jekyll-theme-flow/actions/workflows/ci.yml/badge.svg)](https://github.com/gundestrup/jekyll-theme-flow/actions/workflows/ci.yml)
 [![Gem Version](https://img.shields.io/gem/v/jekyll-theme-flow)](https://rubygems.org/gems/jekyll-theme-flow)
+[![Codecov](https://codecov.io/gh/gundestrup/jekyll-theme-flow/graph/badge.svg)](https://codecov.io/gh/gundestrup/jekyll-theme-flow)
 [![Ruby](https://img.shields.io/badge/ruby-%E2%89%A5%203.3-red.svg)](https://www.ruby-lang.org/)
 [![Jekyll](https://img.shields.io/badge/jekyll-4.x-blue.svg)](https://jekyllrb.com/)
 [![License: AGPL v3](https://img.shields.io/badge/license-AGPL--3.0--or--later-blue.svg)](LICENSE.txt)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/gundestrup/jekyll-theme-flow)
 [![CodeFactor](https://www.codefactor.io/repository/github/gundestrup/jekyll-theme-flow/badge)](https://www.codefactor.io/repository/github/gundestrup/jekyll-theme-flow)
-[![Semgrep CE](https://img.shields.io/badge/Semgrep_CE-security-success)](https://github.com/gundestrup/jekyll-theme-flow)
+[![Semgrep](https://img.shields.io/badge/Semgrep-security-success)](https://github.com/gundestrup/jekyll-theme-flow)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gundestrup_jekyll-theme-flow&metric=alert_status)](https://sonarcloud.io/dashboard?id=gundestrup_jekyll-theme-flow)
 
 A Jekyll theme built on [Bulma](https://bulma.io) (CSS) and
@@ -306,10 +307,10 @@ bundle exec rake ci        # RuboCop, audit, Semgrep, real-site tests and gem co
 bundle exec jekyll serve   # demo pages in repo root
 ```
 
-The theme has no project Ruby runtime to instrument with SimpleCov; its
-coverage comes from real consumer-site Jekyll builds, not a misleading Ruby
-percentage. A Codecov badge should be added only with measurable, non-vendored
-browser or template coverage. SonarCloud analyses the repository automatically;
+The theme's Ruby code in `lib/` is exercised through real consumer-site Jekyll
+builds; SimpleCov measures that coverage and CI uploads it to Codecov. The
+badge reflects `lib/` coverage — templates and vendored assets are not
+instrumented. SonarCloud analyses the repository automatically;
 the scanner excludes vendored Bulma and Alpine.
 Use `bundle exec rake "version:bump[patch]"` to bump the gemspec and lockfile,
 add a dated changelog entry, and run `bundle exec rake version:pre_release`
