@@ -318,3 +318,8 @@ must be configured before publishing.
 
 Known upstream noise: Bulma 1.0.x emits a handful of Sass `if()`
 deprecation warnings during build — harmless, fixed upstream eventually.
+
+## License
+
+Copyright (C) 2026 Svend Gundestrup.
+AGPL-3.0-or-later — see [LICENSE.txt](LICENSE.txt).

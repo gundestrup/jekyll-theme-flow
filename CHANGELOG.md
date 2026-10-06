@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- `LICENSE.txt` now contains the verbatim AGPL-3.0 text (was a stub);
+  added the missing README license section.
+
 ### Added
 
 - SimpleCov coverage instrumentation matching the fleet pattern:
