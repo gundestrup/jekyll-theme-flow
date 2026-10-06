@@ -2,7 +2,7 @@
 ---
 {%- assign flow_variant = page.flow_layout | default: layout.flow_layout | default: site.flow.layout | default: "sidebar-left" -%}
 <!doctype html>
-<html lang="{{ page.lang | default: site.lang | default: "en" | escape }}">
+<html lang="{{ page.lang | default: site.lang | default: "en" | escape }}">{% comment %}<!-- //NOSONAR --> Web:PageWithoutTitleCheck: <title> is rendered by _includes/head.html, which the SonarCloud Web analyzer cannot follow{% endcomment %}
 {% include head.html %}
 <body>
 {% assign shell = "shells/" | append: flow_variant | append: ".html" %}
