@@ -4,6 +4,10 @@
 
 ### Changed
 
+- Updated vendored Bulma Sass conditional syntax to avoid deprecation
+  warnings with current Sass.
+- Constrained runtime plugin dependencies to compatible version series,
+  avoiding open-ended gemspec warnings.
 - CI: Semgrep moved from inline `pip3 install semgrep==1.176.0` pins in `ci.yml` and `release.yml` to hashed `.github/requirements-ci.txt` (compiled from `requirements-ci.in`, Python 3.12), installed with `--require-hashes`. Bumped Semgrep to 1.180.0. Added `.github/dependabot.yml` covering github-actions, bundler, and the new `/.github` pip requirements.
 
 ## [0.1.1] - 2026-10-06

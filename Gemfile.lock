@@ -3,8 +3,8 @@ PATH
   specs:
     jekyll-theme-flow (0.1.1)
       jekyll (>= 4.3, < 5.0)
-      jekyll-client-search (>= 0.3.4)
-      jekyll-icon-flow (>= 0.1)
+      jekyll-client-search (~> 0.3, >= 0.3.4)
+      jekyll-icon-flow (~> 0.1)
       jekyll-sitemap (>= 1.4, < 2.0)
 
 GEM
