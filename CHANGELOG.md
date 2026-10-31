@@ -1,9 +1,28 @@
 # Changelog
 
-## [Unreleased]
+## [0.2.0] - 2026-10-31
+
+### Fixed
+
+- Archived posts and collection documents are now excluded from
+  `sitemap.xml` and get `noindex` too — the archive hook moved from
+  `:pages, :post_init` to a `:site, :post_read` sweep over
+  `site.pages + site.documents` (document `:post_init` fires before
+  front matter is merged, so `layout: archive` was invisible there).
 
 ### Changed
 
+- Test suite migrated from RSpec to Minitest (`spec/` → `test/`,
+  jekyll-test-harness `framework: :minitest`); coverage, codecov and
+  sonar wiring updated accordingly.
+- CI matrix now includes a non-blocking Ruby 4.0 leg alongside
+  3.3/3.4; `.ruby-version` remains 3.4.12.
+- Dependency updates: jekyll-client-search 0.4.0,
+  jekyll-icon-flow 0.1.2, rubocop 1.92.2, sass-embedded 1.107.1,
+  plus transitive bumps; development dep `rspec` replaced by
+  `minitest ~> 6.0`.
+- README gained an Inspiration section (just-the-docs nav model;
+  planned `layout: portfolio` one-pager after jamigibbs/phantom).
 - Updated vendored Bulma Sass conditional syntax to avoid deprecation
   warnings with current Sass.
 - Constrained runtime plugin dependencies to compatible version series,

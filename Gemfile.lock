@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jekyll-theme-flow (0.1.1)
+    jekyll-theme-flow (0.2.0)
       jekyll (>= 4.3, < 5.0)
       jekyll-client-search (~> 0.3, >= 0.3.4)
       jekyll-icon-flow (~> 0.1)
@@ -264,7 +264,7 @@ CHECKSUMS
   jekyll-sass-converter (3.1.0) sha256=83925d84f1d134410c11d0c6643b0093e82e3a3cf127e90757a85294a3862443
   jekyll-sitemap (1.4.0) sha256=0de08c5debc185ea5a8f980e1025c7cd3f8e0c35c8b6ef592f15c46235cf4218
   jekyll-test-harness (0.1.0.alpha) sha256=2b134cbe6c4db4f3a7a6d9e0be8b53ba18767c3c44a95366886924a306bfd98c
-  jekyll-theme-flow (0.1.1)
+  jekyll-theme-flow (0.2.0)
   jekyll-watch (2.2.1) sha256=bc44ed43f5e0a552836245a54dbff3ea7421ecc2856707e8a1ee203a8387a7e1
   json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
   kramdown (2.5.2) sha256=1ba542204c66b6f9111ff00dcc26075b95b220b07f2905d8261740c82f7f02fa

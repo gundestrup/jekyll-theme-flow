@@ -30,6 +30,11 @@ plugins:
   - jekyll-icon-flow
   - jekyll-theme-flow   # loads the archive sitemap hook + auto-loads jekyll-sitemap
 
+# Keep the gemspec out of _site — a stale copy there makes Bundler
+# resolve the path gem from _site instead of the repo root.
+exclude:
+  - jekyll-theme-flow.gemspec
+
 # Archive convention: pages under archive/ get layout + sitemap/nav
 # exclusion via front-matter defaults (see README "Archiving pages").
 defaults:
