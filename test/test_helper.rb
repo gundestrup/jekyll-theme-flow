@@ -12,6 +12,9 @@ unless ENV["COVERAGE"] == "false"
   end
   SimpleCov.start do
     cover "lib/**/*.rb"
+    # Evaluated by Bundler while resolving the gemspec — long before
+    # SimpleCov starts — so it can never be "covered" by the suite.
+    skip "lib/jekyll/theme_flow/version.rb"
     minimum_coverage 90 if ENV["CI"]
   end
 end

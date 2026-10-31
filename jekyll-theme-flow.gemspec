@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require_relative "lib/jekyll/theme_flow/version"
+
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-theme-flow"
-  spec.version       = "0.2.0"
+  spec.version       = Jekyll::ThemeFlow::VERSION
   spec.authors       = ["Svend Gundestrup"]
   spec.email         = ["svend@gundestrup.dk"]
 

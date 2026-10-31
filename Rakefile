@@ -14,6 +14,7 @@ RuboCop::RakeTask.new
 Bundler::Audit::Task.new
 
 GEMSPEC = "jekyll-theme-flow.gemspec"
+VERSION_FILE = File.expand_path("lib/jekyll/theme_flow/version.rb", __dir__)
 
 namespace :version do
   task :show do
@@ -43,9 +44,9 @@ task "version:bump", [:part] do |_task, args|
   current[index] += 1
   current.fill(0, (index + 1)...current.length)
   next_version = current.join(".")
-  content = File.read(GEMSPEC)
-  content = content.sub(/spec\.version\s*=\s*"[^"]+"/, "spec.version       = \"#{next_version}\"")
-  File.write(GEMSPEC, content)
+  content = File.read(VERSION_FILE)
+  content = content.sub(/VERSION = "[^"]+"/, "VERSION = \"#{next_version}\"")
+  File.write(VERSION_FILE, content)
   sh "bundle", "lock" unless ENV["SKIP_LOCK"]
   puts "Bumped to #{next_version}; add a CHANGELOG.md entry"
 end

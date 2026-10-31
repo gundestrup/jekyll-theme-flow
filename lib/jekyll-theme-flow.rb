@@ -2,6 +2,7 @@
 
 require "jekyll"
 require "jekyll-sitemap"
+require "jekyll/theme_flow/version"
 
 # Plugin side of the theme. Layouts/includes work via
 # `theme: jekyll-theme-flow` alone; this file is only evaluated when the
