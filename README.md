@@ -320,6 +320,17 @@ must be configured before publishing.
 Known upstream noise: Bulma 1.0.x emits a handful of Sass `if()`
 deprecation warnings during build — harmless, fixed upstream eventually.
 
+## Inspiration
+
+The nav model borrows the `parent`/`nav_order` convention from
+[just-the-docs](https://just-the-docs.com), and the feature set was
+extracted from real sites built on bulma-clean-theme-style overrides.
+
+Planned: a `portfolio` one-pager layout (hero, about/services/media/
+contact sections) inspired by
+[jamigibbs/phantom](https://github.com/jamigibbs/phantom) — on our
+Bulma + Alpine base.
+
 ## License
 
 Copyright (C) 2026 Svend Gundestrup.

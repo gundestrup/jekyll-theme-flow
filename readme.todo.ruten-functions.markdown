@@ -1,4 +1,4 @@
-# TODO — functions learned from rutenskiklub
+# TODO — functions learned from rutenskiklub — COMPLETE ✅
 
 **Status:** items 1, 2, 3, 5, 6 implemented in the theme
 (`_layouts/archive.html`, `_layouts/archive-index.html`,
@@ -6,12 +6,16 @@
 nav_tree `is-active`/icons). Item 4 resolved via option (a) — built
 into the theme: `jekyll-sitemap` is a runtime dependency (auto-loaded by
 Jekyll's theme-deps mechanism), and `lib/jekyll-theme-flow.rb` ships a
-`:pages, :post_init` hook excluding `layout: archive` pages when the
-theme is plugin-loaded (`plugins:` list / `:jekyll_plugins` group),
-plus a `flow.sitemap` disable switch. Scoped defaults (option b) remain
+`:site, :post_read` hook sweeping pages, posts and collection documents
+to exclude `layout: archive` content when the theme is plugin-loaded
+(`plugins:` list / `:jekyll_plugins` group), plus a `flow.sitemap`
+disable switch. Scoped defaults (option b) remain
 documented for `theme:`-only consumers.
 Item 7 respected: contracts live in head-side checks and config
 defaults, never layout front matter.
+Item 8 moved to README.md as a planned feature — the phantom
+inspiration link lives there now; local reference remains
+`../anders_korsgaard` + `../borg-collective.eu`.
 
 Candidate theme features extracted from the rutenskiklub site
 (bulma-clean-theme + site-owned overrides). Each item below describes
@@ -77,8 +81,11 @@ jekyll-sitemap reads `page.data["sitemap"]`; a theme gem cannot ship
 - **(c) Document `sitemap: false` as required front matter** —
   simplest, but easy to forget.
 
-Note scope (a): the hook must also cover `posts`/`documents`
-containers if archiving non-page content should work.
+Note scope (a): resolved — a single `:site, :post_read` hook sweeps
+`site.pages + site.documents` (posts included), so `layout: archive`
+posts and collection documents are excluded the same way pages are.
+(`:post_init` per-container can't be used for documents: it fires
+before front matter is merged into `data`.)
 
 ## 5. `/archive/` index page
 
@@ -112,3 +119,41 @@ silently. Any "this layout implies X" contract must be implemented
 via a plugin hook, `_config.yml` defaults, or head-side checks like
 #3 (see engineering-memory
 `lessons-learned/jekyll-layout-frontmatter-invisible.md`).
+
+## 8. `layout: portfolio` — single-page portfolio/person site
+
+External inspiration: [jamigibbs/phantom](https://github.com/jamigibbs/phantom)
+(Bootstrap one-pager). We want the same pattern on our Bulma +
+Alpine.js base.
+
+Reference implementations — twin sites that share an in-repo copy of
+this layout (copy-paste drift has already bitten once, see their
+`AGENTS.md` — extracting to the theme removes the duplication):
+
+- `../anders_korsgaard` — `_layouts/default.html`, `index.html`,
+  `_includes/{about,services,contact,social}.md`, `author:` config
+- `../borg-collective.eu` — same structure
+
+What the sites built themselves — i.e. what a `portfolio` layout
+should ship:
+
+- **Fixed navbar with anchor links** (`#about`, `#services`,
+  `#media`, `#contact`) — a `topnav` variant for single-page use;
+  Alpine burger toggle instead of the sites' hand-rolled script
+- **Hero block**: rounded `site.profile_picture`, `author.title`
+  subtitle, social-links row
+- **Content sections** via markdownified includes (`about`,
+  `services`, `contact`) — theme ships the skeleton + slot includes,
+  consumers drop in their own `_includes/*.md` (same pattern as
+  `search.md` / `archive-index`)
+- **Media/projects cards**: posts rendered as link cards honouring
+  `site:`, `git:`, `link:`, `kilde_ikon:` front matter (phantom's
+  projects-grid equivalent); `site.posts` loop, optional
+  jekyll-paginate for a blog variant
+- **Footer**: social links + copyright year-range
+  (`footer_copyright_year` → current year)
+- **Config contract**: `author.{name,title,url,email,mobile,
+  location,social.*}`, `profile_picture`, `footer_copyright_*` —
+  decide whether to keep the `author:` keyspace or nest under
+  `flow.portfolio.*` (same rule as #7: contracts live in config,
+  not layout front matter)
