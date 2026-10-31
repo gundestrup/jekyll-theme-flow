@@ -9,6 +9,9 @@
   `:pages, :post_init` to a `:site, :post_read` sweep over
   `site.pages + site.documents` (document `:post_init` fires before
   front matter is merged, so `layout: archive` was invisible there).
+- Demo `_config.yml` now excludes `jekyll-theme-flow.gemspec` from
+  `_site` — a stale generated copy made Bundler resolve the path gem
+  from `_site/` instead of the repo root.
 
 ### Changed
 
@@ -23,6 +26,9 @@
   `minitest ~> 6.0`.
 - README gained an Inspiration section (just-the-docs nav model;
   planned `layout: portfolio` one-pager after jamigibbs/phantom).
+- Version now lives in `lib/jekyll/theme_flow/version.rb`
+  (`Jekyll::ThemeFlow::VERSION`), matching the sibling-plugin
+  convention; `version:bump` rewrites the constant.
 - Updated vendored Bulma Sass conditional syntax to avoid deprecation
   warnings with current Sass.
 - Constrained runtime plugin dependencies to compatible version series,
