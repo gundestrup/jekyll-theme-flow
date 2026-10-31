@@ -29,10 +29,17 @@ Jekyll::Hooks.register :site, :after_init do |site|
   end
 end
 
-Jekyll::Hooks.register :pages, :post_init do |page|
-  next unless page.data["layout"] == "archive"
-  next if page.site.config.dig("flow", "archive", "sitemap_exclude") == false
+# One pass over every renderable container — `layout: archive` works on
+# pages, posts and collection documents alike. Runs at :post_read
+# because Document#post_init fires before front matter is merged into
+# `data`, while generators (jekyll-sitemap) run right after this.
+Jekyll::Hooks.register :site, :post_read do |site|
+  next if site.config.dig("flow", "archive", "sitemap_exclude") == false
 
-  page.data["sitemap"] = false
-  page.data["noindex"] = true
+  (site.pages + site.documents).each do |piece|
+    next unless piece.data["layout"] == "archive"
+
+    piece.data["sitemap"] = false
+    piece.data["noindex"] = true
+  end
 end

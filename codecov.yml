@@ -11,6 +11,6 @@ coverage:
         threshold: 10%
         informational: true
 ignore:
-  - "spec/**"
+  - "test/**"
   - "assets/**"
   - "_sass/**"

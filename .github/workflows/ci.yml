@@ -14,10 +14,12 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    # Ruby 4.0 runs as a non-blocking signal leg until compatibility is verified.
+    continue-on-error: ${{ matrix.ruby == '4.0' }}
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.3", "3.4"]
+        ruby: ["3.3", "3.4", "4.0"]
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

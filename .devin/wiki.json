@@ -13,7 +13,7 @@
       "content": "Every flow.*/icon_flow.*/client_search.* option has a sensible default — the theme renders with zero config beyond theme: and each key overrides individually."
     },
     {
-      "content": "Coverage note: SimpleCov instruments only the Ruby in lib/ via real consumer-site Jekyll builds and CI uploads it to Codecov; templates and vendored assets are not instrumented (codecov.yml ignores spec/, assets/, _sass/)."
+      "content": "Coverage note: SimpleCov instruments only the Ruby in lib/ via real consumer-site Jekyll builds and CI uploads it to Codecov; templates and vendored assets are not instrumented (codecov.yml ignores test/, assets/, _sass/)."
     },
     {
       "content": "See README.md for the full layout/config reference and release notes."

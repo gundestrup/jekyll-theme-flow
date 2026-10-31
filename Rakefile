@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
-require "rspec/core/rake_task"
+require "rake/testtask"
 require "rubocop/rake_task"
 require "bundler/audit/task"
 require "bundler/gem_tasks"
 require "rubygems/package"
 
-RSpec::Core::RakeTask.new(:spec)
+Rake::TestTask.new(:test) do |t|
+  t.libs = %w[lib test]
+  t.pattern = "test/**/*_test.rb"
+end
 RuboCop::RakeTask.new
 Bundler::Audit::Task.new
 
@@ -68,8 +71,8 @@ task :semgrep do
   sh "semgrep", "scan", "--config", ".semgrep.yml", "--error", "--metrics", "off", "."
 end
 
-task quick: %i[rubocop spec]
-task ci: %i[rubocop bundle:audit semgrep spec version:check package]
+task quick: %i[rubocop test]
+task ci: %i[rubocop bundle:audit semgrep test version:check package]
 task "version:pre_release" => %i[ci version:check_changelog]
 
 desc "Build the demo site"

@@ -18,12 +18,6 @@ end
 
 require "jekyll"
 require "jekyll_test_harness"
-require "rspec"
+require "minitest/autorun"
 
-JekyllTestHarness.install!(framework: :rspec)
-
-RSpec.configure do |config|
-  config.disable_monkey_patching!
-  config.order = :random
-  Kernel.srand config.seed
-end
+JekyllTestHarness.install!(framework: :minitest)

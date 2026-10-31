@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "spec_helper"
+require "test_helper"
 
 # Full-build coverage: a real site consuming the theme end to end —
 # layout dispatch, nav tree, search chrome, and icon tags are all
 # asserted against generated output, not eyeballing the demo.
-RSpec.describe "jekyll-theme-flow site build" do
-  let(:files) do
+class ThemeBuildTest < Minitest::Test
+  def files
     jekyll_files do
       file "index.md" do
         frontmatter("layout" => "default", "title" => "Home", "nav_order" => 1, "icon" => "home")
@@ -66,7 +66,7 @@ RSpec.describe "jekyll-theme-flow site build" do
     end
   end
 
-  let(:config) do
+  def config
     {
       "title" => "Spec Site",
       "url" => "http://example.test",
@@ -83,38 +83,38 @@ RSpec.describe "jekyll-theme-flow site build" do
     }
   end
 
-  it "renders the sidebar shell, nav tree, search bar, and icons" do
+  def test_renders_sidebar_shell_nav_tree_search_bar_and_icons
     jekyll_build(config: config, files: files) do |site|
       home = site.pages.find { |p| p.url == "/" }.output
 
-      expect(home).to include("flow-shell")
-      expect(home).to include("flow-sidebar")
-      expect(home).to include('class="menu-list"')
-      expect(home).to include("flow-search")
-      expect(home).to include("data-icon-pack=")
+      assert_includes home, "flow-shell"
+      assert_includes home, "flow-sidebar"
+      assert_includes home, 'class="menu-list"'
+      assert_includes home, "flow-search"
+      assert_includes home, "data-icon-pack="
     end
   end
 
-  it "nests child pages under their parent in the nav tree" do
+  def test_nests_child_pages_under_parent_in_nav_tree
     jekyll_build(config: config, files: files) do |site|
       child = site.pages.find { |p| p.url == "/child.html" }.output
 
-      expect(child).to include("Section")
-      expect(child).to include('href="/child.html"')
-      expect(child.scan('class="menu-list"').size).to be > 1
+      assert_includes child, "Section"
+      assert_includes child, 'href="/child.html"'
+      assert_operator child.scan('class="menu-list"').size, :>, 1
     end
   end
 
-  it "renders the topnav layout as navbar, no sidebar" do
+  def test_renders_topnav_layout_as_navbar_without_sidebar
     jekyll_build(config: config, files: files) do |site|
       nav_page = site.pages.find { |p| p.url == "/nav-page.html" }.output
 
-      expect(nav_page).to include("navbar")
-      expect(nav_page).not_to include("flow-sidebar")
+      assert_includes nav_page, "navbar"
+      refute_includes nav_page, "flow-sidebar"
     end
   end
 
-  it "escapes site and page metadata in HTML contexts" do
+  def test_escapes_site_and_page_metadata_in_html_contexts
     unsafe = 'A" onmouseover="alert(1) & <unsafe>'
     settings = config.merge("title" => unsafe, "flow" => {
                               "layout" => "sidebar-left", "logo" => '/logo" onerror="alert(1).svg',
@@ -123,18 +123,18 @@ RSpec.describe "jekyll-theme-flow site build" do
                             })
     jekyll_build(config: settings, files: files) do |site|
       home = site.pages.find { |p| p.url == "/" }.output
-      expect(home).to include("A&quot; onmouseover=&quot;alert(1) &amp; &lt;unsafe&gt;")
-      expect(home).to include('src="/logo%22%20onerror=%22alert(1).svg"')
-      expect(home).to include('href="/icon%22%20onload=%22alert(1).ico"')
-      expect(home).not_to include(' onerror="alert(1)')
-      expect(home).to include("&lt;unsafe&quot; onfocus=&quot;alert(1)&gt;")
-      expect(home).not_to include('<unsafe" onfocus="alert(1)>')
+      assert_includes home, "A&quot; onmouseover=&quot;alert(1) &amp; &lt;unsafe&gt;"
+      assert_includes home, 'src="/logo%22%20onerror=%22alert(1).svg"'
+      assert_includes home, 'href="/icon%22%20onload=%22alert(1).ico"'
+      refute_includes home, ' onerror="alert(1)'
+      assert_includes home, "&lt;unsafe&quot; onfocus=&quot;alert(1)&gt;"
+      refute_includes home, '<unsafe" onfocus="alert(1)>'
     end
   end
 
   # Pages using `icon:` must name icons in the configured pack — the
   # strict-mode build below uses a fixture without nav icons.
-  let(:files_no_nav_icons) do
+  def files_no_nav_icons
     jekyll_files do
       file "index.md" do
         frontmatter("layout" => "default", "title" => "Home")
@@ -151,131 +151,165 @@ RSpec.describe "jekyll-theme-flow site build" do
     end
   end
 
-  it "keeps theme chrome visible when the site uses a brand icon pack" do
+  def test_keeps_theme_chrome_visible_with_brand_icon_pack
     settings = config.merge("icon_flow" => { "pack" => "simple", "on_missing" => "strict" })
     jekyll_build(config: settings, files: files_no_nav_icons) do |site|
       home = site.pages.find { |p| p.url == "/" }.output
-      expect(home).to include('class="lucide lucide-search icon icon-search"')
-      expect(home).to include("icon-chevron-right")
+      assert_includes home, 'class="lucide lucide-search icon icon-search"'
+      assert_includes home, "icon-chevron-right"
     end
   end
 
-  it "supports search submission without dropdown JavaScript" do
+  def test_supports_search_submission_without_dropdown_javascript
     settings = config.merge("client_search" => config.fetch("client_search").merge(
       "dropdown" => { "enabled" => false }
     ))
     jekyll_build(config: settings, files: files) do |site|
       home = site.pages.find { |p| p.url == "/" }.output
-      expect(home).to include('action="/search/"')
-      expect(home).to include('method="get"')
-      expect(home).not_to include("client-search-dropdown.js")
+      assert_includes home, 'action="/search/"'
+      assert_includes home, 'method="get"'
+      refute_includes home, "client-search-dropdown.js"
     end
   end
 
-  it "renders the right and bare layouts with their intended chrome" do
+  def test_renders_right_and_bare_layouts_with_intended_chrome
     jekyll_build(config: config, files: files) do |site|
       right = site.pages.find { |p| p.url == "/right-page.html" }.output
       bare = site.pages.find { |p| p.url == "/bare-page.html" }.output
-      expect(right).to include("flow-sidebar flow-right")
-      expect(bare).not_to include("flow-sidebar", "flow-search", "navbar")
+      assert_includes right, "flow-sidebar flow-right"
+      refute_includes bare, "flow-sidebar"
+      refute_includes bare, "flow-search"
+      refute_includes bare, "navbar"
     end
   end
 
-  it "respects the icon, logo, favicon and search toggles" do
+  def test_respects_icon_logo_favicon_and_search_toggles
     flow = { "logo" => "/logo.svg", "logo_enabled" => false,
              "favicon" => "/favicon.ico", "favicon_enabled" => false }
     settings = config.merge("flow" => flow, "icon_flow" => { "enabled" => false },
                             "client_search" => { "enabled" => false })
     jekyll_build(config: settings, files: files) do |site|
       home = site.pages.find { |p| p.url == "/" }.output
-      expect(home).not_to include("flow-brand-icon", "rel=\"icon\"")
-      expect(home).not_to include("flow-search", "data-icon-pack=")
+      refute_includes home, "flow-brand-icon"
+      refute_includes home, 'rel="icon"'
+      refute_includes home, "flow-search"
+      refute_includes home, "data-icon-pack="
     end
   end
 
-  it "renders the archive banner, version links, and noindex on archived pages" do
+  def test_renders_archive_banner_version_links_and_noindex
     jekyll_build(config: config, files: files) do |site|
       old = site.pages.find { |p| p.url == "/archive/old-section.html" }.output
 
-      expect(old).to include("notification is-warning")
-      expect(old).to include('href="/section.html"')
-      expect(old).to include('content="noindex"')
-      expect(old).to include('href="/archive/older-section.html"')
-      expect(old).to include("(current)")
-      expect(old).to include("(archived)")
+      assert_includes old, "notification is-warning"
+      assert_includes old, 'href="/section.html"'
+      assert_includes old, 'content="noindex"'
+      assert_includes old, 'href="/archive/older-section.html"'
+      assert_includes old, "(current)"
+      assert_includes old, "(archived)"
 
       home = site.pages.find { |p| p.url == "/" }.output
-      expect(home).not_to include("noindex")
+      refute_includes home, "noindex"
     end
   end
 
-  it "lists archived versions on the current page and the archive index" do
+  def test_lists_archived_versions_on_current_page_and_archive_index
     jekyll_build(config: config, files: files) do |site|
       section = site.pages.find { |p| p.url == "/section.html" }.output
-      expect(section).to include("Previous versions")
-      expect(section).to include('href="/archive/old-section.html"')
-      expect(section).to include('href="/archive/older-section.html"')
+      assert_includes section, "Previous versions"
+      assert_includes section, 'href="/archive/old-section.html"'
+      assert_includes section, 'href="/archive/older-section.html"'
 
       index = site.pages.find { |p| p.url == "/archive/" }.output
-      expect(index).to include('href="/archive/old-section.html"')
-      expect(index).to include('href="/archive/older-section.html"')
-      expect(index).to include("replaced by")
+      assert_includes index, 'href="/archive/old-section.html"'
+      assert_includes index, 'href="/archive/older-section.html"'
+      assert_includes index, "replaced by"
     end
   end
 
-  it "marks the current nav item and its parent active, and renders nav icons" do
+  def test_marks_current_nav_item_and_parent_active_and_renders_nav_icons
     jekyll_build(config: config, files: files) do |site|
       child = site.pages.find { |p| p.url == "/child.html" }.output
-      expect(child).to include('href="/section.html" class="is-active"')
+      assert_includes child, 'href="/section.html" class="is-active"'
 
       home = site.pages.find { |p| p.url == "/" }.output
-      expect(home).to include("icon icon-home")
+      assert_includes home, "icon icon-home"
 
       topnav_child = site.pages.find { |p| p.url == "/topnav-child.html" }.output
-      expect(topnav_child).to include('class="navbar-link is-active" href="/nav-page.html"')
+      assert_includes topnav_child, 'class="navbar-link is-active" href="/nav-page.html"'
     end
   end
 
-  it "generates a sitemap that excludes archived pages" do
+  def test_generates_sitemap_excluding_archived_pages
     jekyll_build(config: config, files: files) do |site|
       sitemap = File.read(File.join(site.dest, "sitemap.xml"))
 
-      expect(sitemap).to include("/section.html")
-      expect(sitemap).not_to include("/archive/old-section.html")
-      expect(sitemap).not_to include("/archive/older-section.html")
+      assert_includes sitemap, "/section.html"
+      refute_includes sitemap, "/archive/old-section.html"
+      refute_includes sitemap, "/archive/older-section.html"
     end
   end
 
-  it "injects config defaults the consumer can still override" do
+  def test_injects_config_defaults_consumer_can_override
     jekyll_build(config: config, files: files) do |site|
-      expect(site.config.dig("sass", "quiet_deps")).to be true
+      assert_equal true, site.config.dig("sass", "quiet_deps")
     end
 
     overridden = config.merge("sass" => { "quiet_deps" => false })
     jekyll_build(config: overridden, files: files) do |site|
-      expect(site.config.dig("sass", "quiet_deps")).to be false
+      assert_equal false, site.config.dig("sass", "quiet_deps")
     end
   end
 
-  it "honours the sitemap config switches" do
+  def test_honours_sitemap_config_switches
     no_sitemap = config.merge("flow" => { "layout" => "sidebar-left", "sitemap" => false })
     jekyll_build(config: no_sitemap, files: files) do |site|
-      expect(File.exist?(File.join(site.dest, "sitemap.xml"))).to be false
+      refute File.exist?(File.join(site.dest, "sitemap.xml"))
     end
 
     keep = config.merge("flow" => { "layout" => "sidebar-left",
                                     "archive" => { "sitemap_exclude" => false } })
     jekyll_build(config: keep, files: files) do |site|
       sitemap = File.read(File.join(site.dest, "sitemap.xml"))
-      expect(sitemap).to include("/archive/old-section.html")
+      assert_includes sitemap, "/archive/old-section.html"
     end
   end
 
-  it "compiles theme Sass and emits search assets" do
+  # The sitemap-exclusion hook registers every renderable container —
+  # `layout: archive` must keep posts and collection documents out of
+  # sitemap.xml exactly like pages do.
+  def test_excludes_archived_posts_and_documents_from_sitemap
+    non_page_files = jekyll_files do
+      file "index.md" do
+        frontmatter("layout" => "default", "title" => "Home")
+        contents "Welcome"
+      end
+      file "_posts/2026-01-01-old-post.md" do
+        frontmatter("layout" => "archive", "title" => "Old Post")
+        contents "Outdated post"
+      end
+      file "_docs/old-doc.md" do
+        frontmatter("layout" => "archive", "title" => "Old Doc")
+        contents "Outdated doc"
+      end
+    end
+    settings = config.merge("collections" => { "docs" => { "output" => true } })
+    jekyll_build(config: settings, files: non_page_files) do |site|
+      assert File.exist?(File.join(site.dest, "2026", "01", "01", "old-post.html"))
+      assert File.exist?(File.join(site.dest, "docs", "old-doc.html"))
+
+      sitemap = File.read(File.join(site.dest, "sitemap.xml"))
+      assert_includes sitemap, "/"
+      refute_includes sitemap, "old-post"
+      refute_includes sitemap, "old-doc"
+    end
+  end
+
+  def test_compiles_theme_sass_and_emits_search_assets
     jekyll_build(config: config, files: files) do |site|
-      expect(File.exist?(File.join(site.dest, "assets/css/theme.css"))).to be true
-      expect(File.exist?(File.join(site.dest, "search-index.json"))).to be true
-      expect(File.exist?(File.join(site.dest, "search", "index.html"))).to be true
+      assert File.exist?(File.join(site.dest, "assets/css/theme.css"))
+      assert File.exist?(File.join(site.dest, "search-index.json"))
+      assert File.exist?(File.join(site.dest, "search", "index.html"))
     end
   end
 end

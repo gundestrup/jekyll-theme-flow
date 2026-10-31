@@ -23,4 +23,16 @@ Layout/LineLength:
 
 Metrics/BlockLength:
   Exclude:
-    - spec/**/*
+    - test/**/*
+
+Metrics/ClassLength:
+  Exclude:
+    - test/**/*
+
+Metrics/MethodLength:
+  Exclude:
+    - test/**/*
+
+Metrics/AbcSize:
+  Exclude:
+    - test/**/*
