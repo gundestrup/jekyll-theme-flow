@@ -1,19 +1,30 @@
 {%- comment -%}
   Search slot for jekyll-client-search. Renders nothing unless
   site.client_search.enabled. include.input_size: "" or " is-small".
+  The no-JS form submit follows client_search.dropdown.redirect_url.
+  Placeholder precedence: search_placeholder_custom include >
+  flow.search_placeholder > "Search" (JTD convention).
 {%- endcomment -%}
 {%- if site.client_search.enabled -%}
 {%- assign slot_id = include.input_size | default: "full" | slugify -%}
+{%- assign search_redirect = site.client_search.dropdown.redirect_url | default: "/search/" -%}
+{%- if search_redirect == "" %}{% assign search_redirect = "/search/" %}{% endif -%}
+{%- capture search_placeholder -%}{% include search_placeholder_custom.html %}{%- endcapture -%}
+{%- assign search_placeholder = search_placeholder | strip | default: site.flow.search_placeholder | default: "Search" -%}
 <div class="flow-search" data-client-search-dropdown>
-  <form class="control has-icons-left" role="search" action="{{ '/search/' | relative_url }}" method="get" autocomplete="off" data-cs-dropdown-form>
-    <label class="is-sr-only" for="flow-search-input-{{ slot_id }}">{{ site.flow.search_placeholder | default: "Search" | escape }}</label>
-    <input id="flow-search-input-{{ slot_id }}" class="input{{ include.input_size }}" type="search" name="q" autocomplete="off"
-           placeholder="{{ site.flow.search_placeholder | default: "Search" | escape }}"
+  <form class="control has-icons-left" role="search" action="{{ search_redirect | relative_url }}" method="get" autocomplete="off" data-cs-dropdown-form>
+    <label class="is-sr-only" id="flow-search-label-{{ slot_id }}" for="flow-search-input-{{ slot_id }}">{{ search_placeholder | escape }}</label>
+    <input id="flow-search-input-{{ slot_id }}" class="input{{ include.input_size }}" type="search" name="q" role="combobox"
+           aria-autocomplete="list" aria-haspopup="listbox" autocomplete="off"
+           placeholder="{{ search_placeholder | escape }}"
            aria-expanded="false" aria-controls="flow-search-results-{{ slot_id }}"
            data-cs-dropdown-input>
     <span class="icon is-left" aria-hidden="true">{% icon_lucide search size:"0.875em" %}</span>
   </form>
-  <ul id="flow-search-results-{{ slot_id }}" class="flow-search-results"
-      role="listbox" aria-hidden="true" data-cs-dropdown-results></ul>
+  <div id="flow-search-results-{{ slot_id }}" class="flow-search-results"
+       role="listbox" aria-label="Search suggestions">
+    <ul class="flow-search-results-items" role="presentation"
+        aria-hidden="true" data-cs-dropdown-results></ul>
+  </div>
 </div>
 {%- endif %}

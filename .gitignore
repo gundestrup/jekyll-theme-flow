@@ -8,3 +8,4 @@ vendor
 coverage
 .scannerwork
 .DS_Store
+tmp/

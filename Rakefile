@@ -92,3 +92,8 @@ desc "Generate docs/assets demo captures (needs Chrome, ffmpeg, img2webp)"
 task "docs:demo" do
   sh "scripts/docs-demo.sh"
 end
+
+desc "Generate docs/assets layout gallery screenshots (needs Chrome)"
+task "docs:layouts" do
+  sh "scripts/docs-layouts.sh"
+end

@@ -1,15 +1,22 @@
 <div class="columns is-gapless m-0 flow-shell" x-data="{ menu: false }">
   <div class="column">
     {% include navbar.html mode="mobile-only" %}
-    {% if site.client_search.enabled %}
+    {%- capture flow_header_custom -%}{% include header_custom.html %}{%- endcapture -%}
+    {%- if site.client_search.enabled or site.aux_links or flow_header_custom != "" -%}
     <div class="flow-topbar">
       {% include search_slot.html %}
+      {{ flow_header_custom }}
+      {%- if site.aux_links -%}
+      <div class="flow-aux-links">{% include aux_links.html %}</div>
+      {%- endif -%}
     </div>
-    {% endif %}
-    <main class="section">
+    {%- endif -%}
+    <main class="section" id="main-content">
       <div class="content">
+        {% include breadcrumbs.html %}
         {{ content }}
       </div>
+      {% include children_toc.html %}
     </main>
   </div>
   <aside class="column is-narrow flow-sidebar flow-right has-background-light" :class="{ 'is-hidden-mobile': !menu }" @click.outside="menu = false">

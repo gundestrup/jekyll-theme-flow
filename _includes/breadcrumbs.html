@@ -1,0 +1,31 @@
+{%- comment -%}
+  Ancestor breadcrumbs — walks `parent:` front matter upward and renders
+  a Bulma breadcrumb (just-the-docs parity: Region > Town).
+  Disable per site:  flow.breadcrumbs: false
+  Disable per page:  breadcrumbs: false
+{%- endcomment -%}
+{%- if site.flow.breadcrumbs != false and page.breadcrumbs != false and page.parent -%}
+{%- assign crumbs = "" | split: "" -%}
+{%- assign crumb_title = page.parent -%}
+{%- for i in (1..8) -%}
+  {%- assign ancestor = site.data.flow_nav.index[crumb_title] -%}
+  {%- if ancestor == nil -%}
+    {%- assign ancestor = site.html_pages | where: "title", crumb_title | first -%}
+  {%- endif -%}
+  {%- if ancestor -%}
+    {%- assign crumbs = crumbs | unshift: ancestor -%}
+    {%- assign crumb_title = ancestor.parent -%}
+  {%- else -%}
+    {%- assign crumb_title = nil -%}
+  {%- endif -%}
+  {%- unless crumb_title %}{% break %}{% endunless %}
+{%- endfor -%}
+<nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
+  <ul>
+    {%- for c in crumbs -%}
+    <li><a href="{{ c.url | relative_url }}">{{ c.title | escape }}</a></li>
+    {%- endfor -%}
+    <li class="is-active"><a href="{{ page.url | relative_url }}" aria-current="page">{{ page.title | escape }}</a></li>
+  </ul>
+</nav>
+{%- endif %}

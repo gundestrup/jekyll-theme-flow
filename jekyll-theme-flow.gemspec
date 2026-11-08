@@ -23,5 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "jekyll", ">= 4.3", "< 5.0"
   spec.add_dependency "jekyll-client-search", "~> 0.3", ">= 0.3.4"
   spec.add_dependency "jekyll-icon-flow", "~> 0.1"
+  spec.add_dependency "jekyll-seo-tag", ">= 2.0", "< 3.0"
   spec.add_dependency "jekyll-sitemap", ">= 1.4", "< 2.0"
 end

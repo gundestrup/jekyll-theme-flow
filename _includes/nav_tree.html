@@ -2,11 +2,27 @@
   Recursive nav tree. include.pages = array of pages at this level.
   Children are matched via `parent: <parent title>` front matter.
   Auto-opens when the current page is this node, a child (`parent`),
-  or a grandchild (`grand_parent`).
+  or a grandchild (`grand_parent`). Sorting is just-the-docs parity:
+  `nav_order` pages first, then unordered pages by title; a parent can
+  flip its children with `child_nav_order: reversed`, `desc`, or
+  `descending`.
 {%- endcomment -%}
 <ul class="menu-list">
   {%- for p in include.pages -%}
-  {%- assign kids = site.html_pages | where: "parent", p.title | where_exp: "k", "k.nav_exclude != true" | sort: "nav_order" -%}
+  {%- comment -%}
+    Fast path: when the theme is plugin-loaded, NavGenerator fills
+    site.data.flow_nav and nodes arrive as hashes with `children`.
+    `p.children` is nil on a Jekyll::Page drop, so `theme:`-only
+    consumers fall back to live scans here.
+  {%- endcomment -%}
+  {%- assign kids = p.children -%}
+  {%- if kids == nil -%}
+    {%- assign kids_all = site.html_pages | where: "parent", p.title | where_exp: "k", "k.nav_exclude != true" -%}
+    {%- assign kids_ordered = kids_all | where_exp: "k", "k.nav_order" | sort: "nav_order" -%}
+    {%- assign kids_unordered = kids_all | where_exp: "k", "k.nav_order == nil" | sort_natural: "title" -%}
+    {%- assign kids = kids_ordered | concat: kids_unordered -%}
+    {%- if p.child_nav_order == "reversed" or p.child_nav_order == "desc" or p.child_nav_order == "descending" %}{% assign kids = kids | reverse %}{% endif -%}
+  {%- endif -%}
   {%- assign is_active = false -%}
   {%- if p.url == page.url or page.parent == p.title -%}{%- assign is_active = true -%}{%- endif -%}
   {%- if kids.size > 0 -%}
@@ -18,8 +34,9 @@
         {%- if p.icon %}<span class="icon">{% icon p.icon %}</span> {% endif -%}
         {{- p.title | escape -}}
       </a>
-      <button class="button is-ghost is-small px-2" @click="open = !open" :aria-expanded="open" aria-label="Toggle {{ p.title | escape }}">
-        <span class="icon flow-chevron" :class="{ 'is-open': open }">
+      <button class="button is-ghost is-small px-2" @click="open = !open" :aria-expanded="open">
+        <span class="is-sr-only">Toggle {{ p.title | escape }}</span>
+        <span class="icon flow-chevron" :class="{ 'is-open': open }" aria-hidden="true">
           {% icon_lucide chevron-right %}
         </span>
       </button>

@@ -1,0 +1,8 @@
+{%- comment -%}
+  Aux links — just-the-docs parity for the `aux_links` config hash
+  ({name: url}). include.item_class styles each link for its slot
+  (navbar-item in topnav, ghost button in the sidebar top bar).
+{%- endcomment -%}
+{%- for link in site.aux_links -%}
+<a class="{{ include.item_class | default: "button is-ghost is-small" }}" href="{{ link[1] | escape }}"{% if site.aux_links_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ link[0] | escape }}</a>
+{%- endfor -%}

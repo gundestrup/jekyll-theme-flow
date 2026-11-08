@@ -64,6 +64,21 @@
   vertical-align: -0.125em;
 }
 
+.flow-navbar-menu-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-inline-start: auto;
+}
+
+.flow-navbar-menu-label {
+  font-size: 0.75rem;
+}
+
+.flow-navbar-menu-toggle .navbar-burger {
+  margin-inline-start: 0;
+}
+
 // jekyll-icon-flow icons — svg elements carrying the normalized
 // .icon contract; nudge to text baseline (Bulma's own .icon class
 // targets wrapper elements, not the svg itself)
@@ -86,7 +101,7 @@ svg.icon {
   }
 }
 
-.flow-search-results {
+.flow-search-results-items {
   position: absolute;
   top: 100%;
   right: 0;
@@ -114,18 +129,109 @@ svg.icon {
 }
 
 .client-search-dropdown-item {
-  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.75rem;
   margin: 0;
+  cursor: pointer;
 }
 
 .client-search-dropdown-link {
   display: block;
-  padding: 0.5rem 0.75rem;
   color: var(--bulma-text);
   text-decoration: none;
 }
 
-.client-search-dropdown-link:hover,
-.client-search-dropdown-item[aria-selected="true"] .client-search-dropdown-link {
+.client-search-dropdown-item:hover,
+.client-search-dropdown-item[aria-selected="true"] {
   background: var(--bulma-scheme-main-bis);
+}
+
+// Skip-to-main link — visually hidden until focused (a11y).
+.skip-to-main {
+  position: absolute;
+  top: -4rem;
+  left: 0.5rem;
+  z-index: 100;
+  padding: 0.5rem 0.75rem;
+  color: var(--bulma-text-strong);
+  background: var(--bulma-scheme-main);
+  border: 1px solid var(--bulma-border);
+  border-radius: var(--bulma-radius);
+  transition: top 150ms ease;
+}
+
+.skip-to-main:focus {
+  top: 0.5rem;
+}
+
+// Top bar — search slot grows, custom markup and aux links sit right.
+.flow-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .flow-search {
+    flex: 1 1 auto;
+  }
+}
+
+.flow-aux-links {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+// "Table of contents" child list at the bottom of parent pages.
+.flow-children-toc {
+  padding-top: 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--bulma-border);
+}
+
+// Sidebar footer slot (nav_footer_custom).
+.flow-sidebar-footer {
+  border-top: 1px solid var(--bulma-border);
+}
+
+// Floating back-to-top button (flow.back_to_top).
+.back-to-top {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 40;
+  box-shadow: var(--bulma-shadow);
+}
+
+// Callout aliases — just-the-docs conventions mapped onto Bulma
+// notification colors, so `{: .note}` etc. keep working on migrated
+// content.
+:is(.note, .new, .important, .warning, .highlight) {
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  border-left: 0.25rem solid;
+  border-radius: var(--bulma-radius);
+}
+
+.note {
+  background: var(--bulma-info-soft);
+  border-color: var(--bulma-info);
+}
+
+.new {
+  background: var(--bulma-success-soft);
+  border-color: var(--bulma-success);
+}
+
+.important {
+  background: var(--bulma-danger-soft);
+  border-color: var(--bulma-danger);
+}
+
+.warning,
+.highlight {
+  background: var(--bulma-warning-soft);
+  border-color: var(--bulma-warning-bold);
 }

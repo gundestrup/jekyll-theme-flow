@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require "jekyll"
+require "jekyll-seo-tag"
 require "jekyll-sitemap"
+require "jekyll/theme_flow/nav_generator"
 require "jekyll/theme_flow/version"
 
 # Plugin side of the theme. Layouts/includes work via

@@ -1,5 +1,7 @@
-<main class="section">
+<main class="section" id="main-content">
   <div class="content">
+    {% include breadcrumbs.html %}
     {{ content }}
   </div>
+  {% include children_toc.html %}
 </main>

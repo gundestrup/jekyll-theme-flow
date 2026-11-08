@@ -5,6 +5,26 @@
   </a>
 </div>
 <nav class="menu px-4 pb-4" aria-label="site navigation">
-  {%- assign nav_roots = site.html_pages | where_exp: "p", "p.title" | where_exp: "p", "p.nav_exclude != true" | where_exp: "p", "p.parent == nil" | sort: "nav_order" -%}
+  {%- assign nav_roots = site.data.flow_nav.roots -%}
+  {%- unless nav_roots -%}
+    {%- assign nav_all = site.html_pages | where_exp: "p", "p.title" | where_exp: "p", "p.nav_exclude != true" | where_exp: "p", "p.parent == nil" -%}
+    {%- assign nav_ordered = nav_all | where_exp: "p", "p.nav_order" | sort: "nav_order" -%}
+    {%- assign nav_unordered = nav_all | where_exp: "p", "p.nav_order == nil" | sort_natural: "title" -%}
+    {%- assign nav_roots = nav_ordered | concat: nav_unordered -%}
+  {%- endunless -%}
   {% include nav_tree.html pages=nav_roots %}
+  {%- if site.nav_external_links -%}
+  <ul class="menu-list">
+    {%- for link in site.nav_external_links -%}
+    <li><a href="{{ link.url | relative_url | escape }}"{% if link.opens_in_new_tab %} target="_blank" rel="noopener"{% endif %}>
+      {{- link.title | escape -}}
+      {%- unless link.hide_icon %} <span class="icon">{% icon_lucide external-link %}</span>{% endunless -%}
+    </a></li>
+    {%- endfor -%}
+  </ul>
+  {%- endif -%}
 </nav>
+{%- capture flow_nav_footer -%}{% include nav_footer_custom.html %}{%- endcapture -%}
+{%- if flow_nav_footer != "" -%}
+<div class="flow-sidebar-footer px-4 pb-4 is-size-7">{{ flow_nav_footer }}</div>
+{%- endif %}

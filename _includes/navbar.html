@@ -1,23 +1,40 @@
-{%- assign nav_roots = site.html_pages | where_exp: "p", "p.title" | where_exp: "p", "p.nav_exclude != true" | where_exp: "p", "p.parent == nil" | sort: "nav_order" -%}
+{%- assign menu_label_id = include.mode | default: "topnav" | append: "-menu-label" | slugify -%}
+{%- assign nav_roots = site.data.flow_nav.roots -%}
+{%- unless nav_roots -%}
+  {%- assign nav_all = site.html_pages | where_exp: "p", "p.title" | where_exp: "p", "p.nav_exclude != true" | where_exp: "p", "p.parent == nil" -%}
+  {%- assign nav_ordered = nav_all | where_exp: "p", "p.nav_order" | sort: "nav_order" -%}
+  {%- assign nav_unordered = nav_all | where_exp: "p", "p.nav_order == nil" | sort_natural: "title" -%}
+  {%- assign nav_roots = nav_ordered | concat: nav_unordered -%}
+{%- endunless -%}
 <nav class="navbar{% if include.mode == "mobile-only" %} is-hidden-desktop{% endif %}" role="navigation" aria-label="main navigation" x-data="{ open: false }">
   <div class="navbar-brand">
     <a class="navbar-item has-text-weight-semibold" href="{{ '/' | relative_url }}">
       {%- if site.flow.logo and site.flow.logo_enabled != false %}<img class="flow-brand-icon" src="{{ site.flow.logo | relative_url | escape }}" alt="">{% endif %}
       {{- site.title | escape -}}
     </a>
-    {% if include.mode == "mobile-only" -%}
-    <button class="navbar-burger" :class="{ 'is-active': menu }" @click="menu = !menu" :aria-expanded="menu" aria-label="menu">
-    {%- else -%}
-    <button class="navbar-burger" :class="{ 'is-active': open }" @click="open = !open" :aria-expanded="open" aria-label="menu">
-    {%- endif %}
-      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
-    </button>
+    <div class="flow-navbar-menu-toggle is-hidden-desktop">
+      <span id="{{ menu_label_id }}" class="flow-navbar-menu-label">Menu</span>
+      {% if include.mode == "mobile-only" -%}
+      <button class="navbar-burger" :class="{ 'is-active': menu }" @click="menu = !menu" :aria-expanded="menu" aria-labelledby="{{ menu_label_id }}">
+      {%- else -%}
+      <button class="navbar-burger" :class="{ 'is-active': open }" @click="open = !open" :aria-expanded="open" aria-labelledby="{{ menu_label_id }}">
+      {%- endif %}
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+      </button>
+    </div>
   </div>
   {% unless include.mode == "mobile-only" -%}
   <div class="navbar-menu" :class="{ 'is-active': open }">
     <div class="navbar-start">
       {% for p in nav_roots -%}
-      {%- assign kids = site.html_pages | where: "parent", p.title | where_exp: "k", "k.nav_exclude != true" | sort: "nav_order" -%}
+      {%- assign kids = p.children -%}
+      {%- if kids == nil -%}
+        {%- assign kids_all = site.html_pages | where: "parent", p.title | where_exp: "k", "k.nav_exclude != true" -%}
+        {%- assign kids_ordered = kids_all | where_exp: "k", "k.nav_order" | sort: "nav_order" -%}
+        {%- assign kids_unordered = kids_all | where_exp: "k", "k.nav_order == nil" | sort_natural: "title" -%}
+        {%- assign kids = kids_ordered | concat: kids_unordered -%}
+        {%- if p.child_nav_order == "reversed" or p.child_nav_order == "desc" or p.child_nav_order == "descending" %}{% assign kids = kids | reverse %}{% endif -%}
+      {%- endif -%}
       {%- assign p_active = false -%}
       {%- if p.url == page.url or page.parent == p.title %}{% assign p_active = true %}{% endif -%}
       {%- if kids.size > 0 %}
@@ -43,13 +60,18 @@
       {%- endif -%}
       {% endfor %}
     </div>
-    {% if site.client_search.enabled -%}
+    {%- if site.client_search.enabled or site.aux_links -%}
     <div class="navbar-end">
+      {%- if site.aux_links -%}
+        {% include aux_links.html item_class="navbar-item" %}
+      {%- endif -%}
+      {%- if site.client_search.enabled -%}
       <div class="navbar-item">
         {% include search_slot.html input_size=" is-small" %}
       </div>
+      {%- endif -%}
     </div>
-    {%- endif %}
+    {%- endif -%}
   </div>
   {%- endunless %}
 </nav>

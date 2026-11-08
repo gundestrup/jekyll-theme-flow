@@ -1,5 +1,17 @@
+{%- comment -%}
+  Timestamp sources: jekyll-last-modified-at (last_modified_at),
+  front matter last_modified, or JTD's last_modified_date. Enabled
+  unless flow.last_edit: false or JTD's last_edit_timestamp: false.
+{%- endcomment -%}
+{%- assign last_mod = page.last_modified_at | default: page.last_modified | default: page.last_modified_date -%}
+{%- assign le_format = site.flow.last_edit_format | default: site.last_edit_time_format | default: "%-d %B %Y" -%}
 <footer class="footer py-4">
   <div class="content has-text-centered is-size-7">
+    {%- if last_mod and site.flow.last_edit != false and site.last_edit_timestamp != false -%}
+    <p>Page last modified: {{ last_mod | date: le_format }}</p>
+    {%- endif -%}
     <p>{{ site.title | escape }}{% if site.flow.footer_text %} · {{ site.flow.footer_text | escape }}{% endif %}</p>
+    {%- if site.footer_content -%}<p>{{ site.footer_content | escape }}</p>{%- endif -%}
+    {% include footer_custom.html %}
   </div>
 </footer>

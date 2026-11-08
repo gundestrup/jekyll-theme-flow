@@ -1,14 +1,30 @@
 ---
 ---
 {%- assign flow_variant = page.flow_layout | default: layout.flow_layout | default: site.flow.layout | default: "sidebar-left" -%}
+{%- if page.nav_enabled == false or page.nav_enabled == nil and site.nav_enabled == false -%}
+  {%- assign flow_variant = "bare" -%}
+{%- endif -%}
 <!doctype html>
-<html lang="{{ page.lang | default: site.lang | default: "en" | escape }}">{% comment %}<!-- //NOSONAR --> Web:PageWithoutTitleCheck: <title> is rendered by _includes/head.html, which the SonarCloud Web analyzer cannot follow{% endcomment %}
+<html lang="{{ page.lang | default: site.lang | default: "en" | escape }}"{% if site.flow.theme == "light" or site.flow.theme == "dark" %} data-theme="{{ site.flow.theme | escape }}"{% endif %}>{% comment %}<!-- //NOSONAR --> Web:PageWithoutTitleCheck: <title> is rendered by {% seo %} inside _includes/head.html, which the SonarCloud Web analyzer cannot follow{% endcomment %}
 {% include head.html %}
 <body>
+<a class="skip-to-main" href="#main-content">Skip to main content</a>
 {% assign shell = "shells/" | append: flow_variant | append: ".html" %}
 {% include {{ shell }} %}
 {% include footer.html %}
+{% include back_to_top.html %}
 {% if site.client_search.enabled %}{% search_dropdown scripts_only %}{% endif %}
+{%- if site.flow.table_wrap != false -%}
+<script>
+document.querySelectorAll("#main-content table").forEach(function (table) {
+  if (table.parentElement.classList.contains("table-container")) return;
+  var wrapper = document.createElement("div");
+  wrapper.className = "table-container";
+  table.parentNode.insertBefore(wrapper, table);
+  wrapper.appendChild(table);
+});
+</script>
+{%- endif %}
 <script src="{{ '/assets/js/alpine.min.js' | relative_url }}" defer></script>
 </body>
 </html>

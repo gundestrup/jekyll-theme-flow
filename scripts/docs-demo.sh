@@ -9,9 +9,9 @@ chrome="${CHROME_BIN:-/Applications/Google Chrome.app/Contents/MacOS/Google Chro
 command -v ffmpeg >/dev/null 2>&1 || { echo "ffmpeg not found" >&2; exit 1; }
 command -v img2webp >/dev/null 2>&1 || { echo "img2webp not found" >&2; exit 1; }
 mkdir -p "$dir/frames"
-for i in 0 1 2 3; do
+for i in 0 1 2 3 4; do
   if ! "$chrome" --headless=new --disable-gpu --hide-scrollbars \
-    --screenshot="$dir/frames/f$i.png" --window-size=880,560 \
+    --screenshot="$dir/frames/f$i.png" --window-size=880,640 \
     "file://$PWD/$dir/demo.html?step=$i" >/dev/null 2>&1; then
     echo "Chrome screenshot failed at step $i" >&2
     exit 1

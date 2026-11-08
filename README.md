@@ -30,6 +30,11 @@ pipeline, and Alpine is vendored into the theme.
   <img src="docs/assets/jekyll-theme-flow-demo.png"
        alt="jekyll-theme-flow demo">
 </picture>
+<picture>
+  <source srcset="docs/assets/layout-demo.avif" type="image/avif">
+  <source srcset="docs/assets/layout-demo.webp" type="image/webp">
+  <img src="docs/assets/layout-demo.png" alt="jekyll-theme-flow layout shells">
+</picture>
 <!-- markdownlint-enable MD033 -->
 
 ## Installation
@@ -94,6 +99,17 @@ work directly in front matter.
 | `sidebar-right` | Same, sidebar on the right |
 | `topnav` | Bulma navbar with hover dropdowns for children, no sidebar |
 | `bare` | Content only — no nav chrome |
+
+The same demo front page rendered by each shell (real headless-Chrome
+captures — `bundle exec rake docs:layouts` regenerates them):
+
+<!-- markdownlint-disable MD033 -->
+| `sidebar-left` | `sidebar-right` |
+| --- | --- |
+| <img src="docs/assets/layout-sidebar-left.png" alt="sidebar-left shell" width="560"> | <img src="docs/assets/layout-sidebar-right.png" alt="sidebar-right shell" width="560"> |
+| `topnav` | `bare` |
+| <img src="docs/assets/layout-topnav.png" alt="topnav shell" width="560"> | <img src="docs/assets/layout-bare.png" alt="bare shell" width="560"> |
+<!-- markdownlint-enable MD033 -->
 
 On mobile, sidebars collapse into a burger-toggled drawer (Alpine).
 
@@ -386,7 +402,7 @@ rendered HTML and accessibility attributes, while the Jekyll build compiles
 Sass. The search dropdown JavaScript is owned by `jekyll-client-search` and
 linted/tested in that gem; this theme does not currently run a dedicated HTML
 validator or CSS linter.
-Use `bundle exec rake "version:bump[patch]"` to bump the gemspec and lockfile,
+Use `bundle exec rake "version:bump[patch]"` to bump `version.rb` and the lockfile,
 add a dated changelog entry, and run `bundle exec rake version:pre_release`
 before tagging. GitHub `release` environment and RubyGems trusted publishing
 must be configured before publishing.

@@ -1,0 +1,28 @@
+{%- comment -%}
+  Auto "Table of contents" child list at the bottom of parent pages
+  (just-the-docs children_nav parity). Renders only when the page has
+  children. Disable per site: flow.children_toc: false — per page:
+  has_toc: false. Honour has_children: false and child_nav_order.
+{%- endcomment -%}
+{%- if site.flow.children_toc != false and page.has_children != false and page.has_toc != false -%}
+{%- assign toc_kids = site.data.flow_nav.index[page.title].children -%}
+{%- if toc_kids == nil -%}
+  {%- assign toc_all = site.html_pages | where: "parent", page.title | where_exp: "k", "k.nav_exclude != true" -%}
+  {%- assign toc_ordered = toc_all | where_exp: "k", "k.nav_order" | sort: "nav_order" -%}
+  {%- assign toc_unordered = toc_all | where_exp: "k", "k.nav_order == nil" | sort_natural: "title" -%}
+  {%- assign toc_kids = toc_ordered | concat: toc_unordered -%}
+  {%- if page.child_nav_order == "reversed" or page.child_nav_order == "desc" or page.child_nav_order == "descending" %}
+    {%- assign toc_kids = toc_kids | reverse -%}
+  {%- endif %}
+{%- endif %}
+{%- if toc_kids.size > 0 -%}
+<nav class="flow-children-toc" aria-label="child pages">
+  {% include toc_heading_custom.html %}
+  <ul>
+    {%- for k in toc_kids -%}
+    <li><a href="{{ k.url | relative_url }}">{{ k.title | escape }}</a></li>
+    {%- endfor -%}
+  </ul>
+</nav>
+{%- endif -%}
+{%- endif %}
