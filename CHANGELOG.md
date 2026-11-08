@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- In-range gem updates: `addressable` 2.9.1 → 2.9.2, `minitest`
+  6.0.6 → 6.1.0, `sass-embedded` 1.107.1 → 1.108.1;
+  `BUNDLED WITH` 4.0.21 → 4.0.24.
+- CI: `ruby/setup-ruby` pin bumped v1.335.0 → v1.338.0.
+
 ## [0.2.0] - 2026-10-31
 
 ### Fixed
