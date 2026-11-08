@@ -87,3 +87,8 @@ task :serve do
 end
 
 task default: :quick
+
+desc "Generate docs/assets demo captures (needs Chrome, ffmpeg, img2webp)"
+task "docs:demo" do
+  sh "scripts/docs-demo.sh"
+end

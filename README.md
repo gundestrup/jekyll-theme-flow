@@ -19,6 +19,19 @@ standard layout shells you can switch per site or per page.
 No Node toolchain required — Bulma compiles through Jekyll's own Sass
 pipeline, and Alpine is vendored into the theme.
 
+<!-- markdownlint-disable MD033 -->
+<picture>
+  <source
+    srcset="docs/assets/jekyll-theme-flow-demo.avif"
+    type="image/avif">
+  <source
+    srcset="docs/assets/jekyll-theme-flow-demo.webp"
+    type="image/webp">
+  <img src="docs/assets/jekyll-theme-flow-demo.png"
+       alt="jekyll-theme-flow demo">
+</picture>
+<!-- markdownlint-enable MD033 -->
+
 ## Installation
 
 ```ruby
@@ -33,8 +46,9 @@ theme: jekyll-theme-flow
 
 `theme:` alone gives you layouts, includes, Sass and assets — Jekyll
 also auto-requires the theme's runtime dependencies
-(`jekyll-client-search`, `jekyll-icon-flow`, `jekyll-sitemap`), so the
-tags, search assets and `sitemap.xml` work without listing them.
+(`jekyll-client-search`, `jekyll-icon-flow`, `jekyll-seo-tag`,
+`jekyll-sitemap`), so the tags, search assets, SEO meta and
+`sitemap.xml` work without listing them.
 
 Every `flow.*`/`icon_flow.*`/`client_search.*` option has a sensible
 default — the theme renders with zero config beyond `theme:`, and each
@@ -75,7 +89,7 @@ Named layouts (`sidebar-left`, `sidebar-right`, `topnav`, `bare`) also
 work directly in front matter.
 
 | Shell | What you get |
-|---|---|
+| --- | --- |
 | `sidebar-left` | Sticky left sidebar with expandable nav tree + content column (default) |
 | `sidebar-right` | Same, sidebar on the right |
 | `topnav` | Bulma navbar with hover dropdowns for children, no sidebar |
@@ -283,17 +297,73 @@ flow:
   favicon_enabled: true          # set false to disable
   search_placeholder: "Search"   # placeholder text in the search field
 
+  theme: auto                    # auto | light | dark — forces Bulma
+                                 # data-theme; auto follows the OS
+  breadcrumbs: true              # "Parent > Child" above content
+  children_toc: true             # auto child list at page bottom
+  back_to_top: false             # floating back-to-top button
+  last_edit: true                # "Page last modified" in footer when
+                                 # page.last_modified(_at/_date) is set
+  last_edit_format: "%-d %B %Y"  # strftime for the timestamp
+  table_wrap: true               # wrap tables in .table-container
+
   footer_text: "Powered by ..."  # optional footer line
+  nav_cache: true                # precompute nav tree once per build
+                                 # (plugin-loaded only); false = live
+                                 # Liquid scans
   # archive:                     # banner/footer strings, see "Archiving pages"
 ```
+
+## Just-the-docs conventions
+
+The theme understands the front matter and config a
+[just-the-docs](https://just-the-docs.com) site already carries, so
+migrating mostly means swapping `theme:` and the Gemfile line:
+
+| JTD convention | Behaviour here |
+| --- | --- |
+| `layout: home` / `page` / `post` | Aliases of `default` — pages keep working unchanged |
+| `parent:`, `nav_order:`, `nav_exclude:`, `grand_parent:` | Same nav semantics; `nav_order` pages sort first, then unordered pages by title |
+| `child_nav_order: reversed` (or `desc`) | Reverses the parent's child listing |
+| `has_children: false`, `has_toc: false` | Disables the auto "Table of contents" child list |
+| `nav_enabled: false` | Renders the `bare` shell for that page |
+| `nav_external_links` | Appended to the sidebar nav (`title`, `url`, `opens_in_new_tab`, `hide_icon`) |
+| `aux_links` + `aux_links_new_tab` | Header/topbar links (`{name: url}` hash) |
+| `breadcrumbs: false` | Per-page opt-out of breadcrumbs (`flow.breadcrumbs: false` site-wide) |
+| `favicon_ico:` | Used as the favicon when `flow.favicon` is unset (`flow.favicon_enabled` still applies) |
+| `footer_content:` | Rendered as escaped plain text; use `footer_custom.html` for trusted markup |
+| `last_edit_timestamp:` / `last_edit_time_format:` | Aliases for `flow.last_edit` / `flow.last_edit_format`; `last_modified_date` front matter also feeds the timestamp |
+| `search_placeholder_custom` include | Overrides the search field placeholder (`flow.search_placeholder` is the config alternative) |
+| `{: .note}` `.new` `.important` `.warning` `.highlight` | Callout classes mapped onto Bulma colours |
+| `{% raw %}{% seo %}{% endraw %}` | Emitted by `head.html` — `jekyll-seo-tag` is a runtime dependency, so meta tags work with zero config |
+
+Site includes named `head_custom`, `header_custom`, `footer_custom`,
+`nav_footer_custom`, `toc_heading_custom` or
+`search_placeholder_custom` are honoured at the equivalent spots
+(theme ships them empty — your file wins, same as JTD).
+`header_custom` renders inside the top bar next to the search slot;
+`nav_footer_custom` renders at the bottom of the sidebar. The
+`footer_content` config value is escaped as text; put trusted HTML in
+`footer_custom.html` instead.
+
+## Nav performance
+
+When the theme is plugin-loaded, a built-in generator groups and sorts
+the nav pages once per build (`site.data["flow_nav"]`). This removes the
+old full `site.html_pages` scan for every nav node on every rendered
+page. Liquid still traverses the menu tree to emit each page's navigation,
+so the final rendering cost remains proportional to the nav output.
+Consumers using `theme:` without the plugin keep working: the includes
+fall back to live scans. Disable the generator with
+`flow.nav_cache: false`.
 
 ## Customization surface
 
 Intentionally small — the theme relies on Bulma components and helpers
 (`menu`, `navbar`, `columns`, `is-hidden-*`, spacing helpers) rather
-than bespoke CSS. The only custom CSS is the app shell (~50 lines in
-`_sass/flow.scss`): fixed/sticky sidebar, drawer positioning, chevron
-rotation, brand icon sizing.
+than bespoke CSS. The only custom CSS is the app shell plus small
+component styles (`_sass/flow.scss`): fixed/sticky sidebar, drawer
+positioning, chevron rotation, brand icon sizing, callouts.
 
 Override the usual Jekyll way: same-named files in your site win
 (`_includes/`, `_layouts/`, `_sass/`). Bulma Sass variables can be
@@ -311,7 +381,11 @@ The theme's Ruby code in `lib/` is exercised through real consumer-site Jekyll
 builds; SimpleCov measures that coverage and CI uploads it to Codecov. The
 badge reflects `lib/` coverage — templates and vendored assets are not
 instrumented. SonarCloud analyses the repository automatically;
-the scanner excludes vendored Bulma and Alpine.
+the scanner excludes vendored Bulma and Alpine. Consumer-site tests assert
+rendered HTML and accessibility attributes, while the Jekyll build compiles
+Sass. The search dropdown JavaScript is owned by `jekyll-client-search` and
+linted/tested in that gem; this theme does not currently run a dedicated HTML
+validator or CSS linter.
 Use `bundle exec rake "version:bump[patch]"` to bump the gemspec and lockfile,
 add a dated changelog entry, and run `bundle exec rake version:pre_release`
 before tagging. GitHub `release` environment and RubyGems trusted publishing
