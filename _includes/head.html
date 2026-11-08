@@ -1,5 +1,5 @@
 {%- assign favicon_path = site.flow.favicon | default: site.favicon_ico -%}
-<head>
+<head>{% comment %}<!-- //NOSONAR --> Web:PageWithoutTitleCheck: <title> is emitted by {% seo %} (jekyll-seo-tag), which the SonarCloud Web analyzer cannot expand{% endcomment %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% seo %}

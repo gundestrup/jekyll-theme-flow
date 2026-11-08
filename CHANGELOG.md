@@ -2,6 +2,14 @@
 
 <!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->
 
+## [0.3.1] - 2026-11-08
+
+### Fixed
+
+- SonarCloud quality gate: add `lang`/`title` to `docs/assets/demo.html`
+  and a `//NOSONAR` marker on `_includes/head.html` — `<title>` is
+  emitted by `{% seo %}`, which the web analyzer cannot expand.
+
 ## [0.3.0] - 2026-11-08
 
 ### Added
