@@ -9,11 +9,24 @@ Gem::Specification.new do |spec|
   spec.email         = ["svend@gundestrup.dk"]
 
   spec.summary       = "A Bulma + Alpine.js Jekyll theme with switchable standard layouts"
+  # NOTE: rubygems.org renders the description through RDoc::Markup only
+  # when it starts with an == heading at column 0 — keep the heredoc
+  # content flush-left or the page renders as one plain <p>.
+  spec.description   = <<~DESC
+    == Bulma + Alpine.js Jekyll theme
+
+    Switchable standard layouts, bundling jekyll-client-search,
+    jekyll-icon-flow, jekyll-seo-tag and jekyll-sitemap.
+  DESC
   spec.homepage      = "https://github.com/gundestrup/jekyll-theme-flow"
   spec.license       = "AGPL-3.0-or-later"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   spec.metadata["rubygems_mfa_required"] = "true"
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = spec.homepage
+  spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/main/CHANGELOG.md"
+  spec.metadata["bug_tracker_uri"] = "#{spec.homepage}/issues"
 
   spec.files = Dir["assets/**/*", "lib/**/*", "_includes/**/*", "_layouts/**/*", "_sass/**/*",
                    "CHANGELOG.md", "LICENSE.txt", "README.md"].select { |path| File.file?(path) }
