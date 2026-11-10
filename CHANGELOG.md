@@ -2,6 +2,15 @@
 
 <!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->
 
+## [0.3.2] - 2026-11-10
+
+### Added
+
+- Gemspec `description` (previously missing) — an RDoc `==`-headed blurb
+  so rubygems.org renders it as markup — plus `metadata` URIs
+  (`homepage_uri`, `source_code_uri`, `changelog_uri`, `bug_tracker_uri`,
+  `allowed_push_host`, `rubygems_mfa_required`).
+
 ## [0.3.1] - 2026-11-08
 
 ### Fixed
