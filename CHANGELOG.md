@@ -2,6 +2,12 @@
 
 <!-- markdownlint-configure-file { "MD024": { "siblings_only": true } } -->
 
+## [Unreleased]
+
+### Changed
+
+- Dev-tooling bump: `rubocop` 1.92.2 → 1.92.3 (plus transitive `parser` 3.3.14.0, `prism` 2.1.0, `rubocop-ast` 1.53.0, `regexp_parser` 2.13.4).
+
 ## [0.3.2] - 2026-11-10
 
 ### Added
